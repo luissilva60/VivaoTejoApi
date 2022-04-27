@@ -22,7 +22,7 @@ app.use('/    ', indexRouter);
 app.use('/users', usersRouter);
 
 app.get('/api/users', utilizador.getUsers);
-app.get('/api/users/:id(\d+)',utilizador.getUser())
+app.get('/api/users/:id(\d+)',utilizador.getUser)
 
 
 app.get('/api/embarcacoes', embarcacao.getEmbarcacoes);
