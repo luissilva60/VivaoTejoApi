@@ -24,9 +24,9 @@ app.use('/users', usersRouter);
 app.get('/api/users', utilizador.getUsers);
 app.get('/api/users/:id(\\d+)',utilizador.getUser)
 
-
-app.get('/api/embarcacoes', embarcacao.getEmbarcacoes);
-app.get('/api/embarcacoes/:id(\\d+)',embarcacao.getEmbarcacao)
+/*                   EMBARCACOES               */
+app.get('/api/embarcacao', embarcacao.getEmbarcacoes);
+app.get('/api/embarcacao/:id(\\d+)',embarcacao.getEmbarcacao)
 
 
 module.exports = app;
