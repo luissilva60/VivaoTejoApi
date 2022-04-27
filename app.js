@@ -20,9 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/    ', indexRouter);
 app.use('/users', usersRouter);
-
+/*                   USER                */
 app.get('/api/users', utilizador.getUsers);
-app.get('/api/users/:id(\d+)',utilizador.getUser)
+app.get('/api/users/:id(\\d+)',utilizador.getUser)
 
 
 app.get('/api/embarcacoes', embarcacao.getEmbarcacoes);
