@@ -26,7 +26,7 @@ app.get('/api/users/:id(\\d+)',utilizador.getUser)
 
 
 app.get('/api/embarcacoes', embarcacao.getEmbarcacoes);
-
+app.get('/api/embarcacoes/:id(\\d+)',embarcacao.getEmbarcacao)
 
 
 module.exports = app;
