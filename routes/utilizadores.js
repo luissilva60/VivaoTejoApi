@@ -17,7 +17,7 @@ const getUsers = (request, response) => {
 }
 
 const getUser = (request, response) => {
-    const id = parseInt(req.params.id)
+    const id = parseInt(request.params.id)
 
     client.query('select * from utilizador WHERE utilizador_id = $1',[id], (error, results) => {
         if (error) {
