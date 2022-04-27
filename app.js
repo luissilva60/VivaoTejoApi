@@ -8,6 +8,7 @@ var usersRouter = require('./routes/users');
 
 const utilizador = require('./routes/utilizadores');
 
+const embarcacao = require('./routes/embarcacoes');
 
 var app = express();
 
@@ -21,7 +22,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.get('/api/users', utilizador.getUsers);
-
+app.get('/api/embarcacoes', embarcacao.getEmbarcacoes);
 
 
 
