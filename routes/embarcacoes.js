@@ -8,7 +8,7 @@ client.connect();
 
 
 const getEmbarcacoes = (request, response) => {
-    client.query('select * from embarcacoes', (error, results) => {
+    client.query('select * from embarcacao', (error, results) => {
         if (error) {
             throw error
         }
@@ -19,7 +19,7 @@ const getEmbarcacoes = (request, response) => {
 const getEmbarcacao = (request, response) => {
     const id = parseInt(request.params.id)
 
-    client.query('select * from utilizador WHERE utilizador_id = $1',[id], (error, results) => {
+    client.query('select * from embarcacao WHERE embarcacao_id = $1',[id], (error, results) => {
         if (error) {
             throw error
         }
