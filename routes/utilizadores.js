@@ -16,6 +16,17 @@ const getUsers = (request, response) => {
     })
 }
 
+const getUser = (request, response) => {
+    const id = parseInt(req.params.id)
+
+    client.query('select * from utilizador WHERE utilizador_id = $1',[id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 module.exports = {
-    getUsers,
+    getUsers,getUser,
 }
