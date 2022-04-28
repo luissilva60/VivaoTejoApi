@@ -14,6 +14,8 @@ const eventos = require('./routes/eventos');
 
 const artigos = require('./routes/artigos');
 
+const cais = require('./routes/cais');
+
 var app = express();
 
 app.use(logger('dev'));
@@ -41,5 +43,11 @@ app.get('/api/eventos/:id(\\d+)',eventos.getEvento)
 /*                 ARTIGOS             */
 app.get('/api/artigos', artigos.getArtigos);
 app.get('/api/artigos/:id(\\d+)',artigos.getArtigo)
+
+
+/*                 CAIS            */
+app.get('/api/cais', cais.getCais);
+app.get('/api/cais/:id(\\d+)',cais.get1Cais)
+
 
 module.exports = app;
