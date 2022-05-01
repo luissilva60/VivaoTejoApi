@@ -1,4 +1,4 @@
-const client = require('../models/connection.js')
+const client = require('./connection.js')
 const express = require('express');
 const {log} = require("debug");
 const app = express();
@@ -7,8 +7,8 @@ const app = express();
 client.connect();
 
 
-const getCais = (request, response) => {
-    client.query('select * from cais', (error, results) => {
+const getArtigos = (request, response) => {
+    client.query('select * from artigos', (error, results) => {
         if (error) {
             throw error
         }
@@ -16,10 +16,10 @@ const getCais = (request, response) => {
     })
 }
 
-const get1Cais = (request, response) => {
+const getArtigo = (request, response) => {
     const id = parseInt(request.params.id)
 
-    client.query('select * from cais WHERE cais_id = $1',[id], (error, results) => {
+    client.query('select * from artigos WHERE artigos_id = $1',[id], (error, results) => {
         if (error) {
             throw error
         }
@@ -28,5 +28,5 @@ const get1Cais = (request, response) => {
 }
 
 module.exports = {
-    getCais,get1Cais,
+    getArtigos,getArtigo,
 }

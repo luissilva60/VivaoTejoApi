@@ -1,4 +1,4 @@
-const client = require('../models/connection.js')
+const client = require('./connection.js')
 const express = require('express');
 const {log} = require("debug");
 const app = express();
@@ -30,7 +30,7 @@ module.exports.getEmbarcacao = (request, response) => {
 module.exports.addEmbarcacao = (req, res) => {
     const embarcacao = req.body;
     let insertQuery = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id,embarcacao_cais_id) 
-    values('${embarcacao.embarcacao_name}', '${embarcacao.embarcacao_info}', '${embarcacao.embarcacao_prop_id}', '${embarcacao.embarcacao_cais_id}')`
+    values('${embarcacao.embarcacao_name}', '${embarcacao.info}', '${embarcacao.propId}', '${embarcacao.caisId}')`
 
     client.query(insertQuery, (err, result)=>{
         if(!err){

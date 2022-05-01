@@ -5,16 +5,17 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var embarcacoesRouter = require('./routes/embarcacoesRoutes')
 
-const utilizador = require('./routes/utilizadores');
+const utilizador = require('./models/utilizadores');
 
-const embarcacao = require('./routes/embarcacoes');
+const embarcacao = require('./models/embarcacoes');
 
-const eventos = require('./routes/eventos');
+const eventos = require('./models/eventos');
 
-const artigos = require('./routes/artigos');
+const artigos = require('./models/artigos');
 
-const cais = require('./routes/cais');
+const cais = require('./models/cais');
 
 var app = express();
 
@@ -33,7 +34,7 @@ app.get('/api/utilizador', utilizador.getUsers)
 app.get('/api/utilizador/:id(\\d+)',utilizador.getUser)
 
 /*                   EMBARCACOES               */
-app.get('/api/embarcacao', embarcacao.getEmbarcacoes)
+app.use('/api/embarcacao', embarcacoesRouter)
 app.get('/api/embarcacao/:id(\\d+)',embarcacao.getEmbarcacao)
 app.post('/api/embarcacao', embarcacao.addEmbarcacao)
 app.delete('/api/embarcacao/:id(\\d+)',embarcacao.deleteEmbarcacao)
