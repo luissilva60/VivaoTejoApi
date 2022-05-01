@@ -7,13 +7,13 @@ const app = express();
 client.connect();
 
 
-module.exports.getEmbarcacoes = async function() {
+module.exports.getEmbarcacoes = (request, response) => {
     client.query('select * from embarcacao', (error, results) => {
         if (error) {
             throw error
-            return {status:500, data: error}
         }
-        return {status:200, data: results.rows}
+        results = {status : 200, data: results.rows}
+        response.send(results);
     })
 }
 
