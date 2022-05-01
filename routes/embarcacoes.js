@@ -7,7 +7,7 @@ const app = express();
 client.connect();
 
 
-const getEmbarcacoes = (request, response) => {
+module.exports.getEmbarcacoes = (request, response) => {
     client.query('select * from embarcacao', (error, results) => {
         if (error) {
             throw error
@@ -16,7 +16,7 @@ const getEmbarcacoes = (request, response) => {
     })
 }
 
-const getEmbarcacao = (request, response) => {
+module.exports.getEmbarcacao = (request, response) => {
     const id = parseInt(request.params.id)
 
     client.query('select * from embarcacao WHERE embarcacao_id = $1',[id], (error, results) => {
@@ -27,7 +27,7 @@ const getEmbarcacao = (request, response) => {
     })
 }
 
-const addEmbarcacao = (req, res) => {
+module.exports.addEmbarcacao = (req, res) => {
     const embarcacao = req.body;
     let insertQuery = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id,embarcacao_cais_id) 
     values('${embarcacao.embarcacao_name}', '${embarcacao.embarcacao_info}', '${embarcacao.embarcacao_prop_id}', '${embarcacao.embarcacao_cais_id}')`
@@ -42,7 +42,7 @@ const addEmbarcacao = (req, res) => {
     client.end;
 }
 
-const deleteEmbarcacao = (req, res)=> {
+module.exports.deleteEmbarcacao = (req, res)=> {
     let insertQuery = `delete from embarcacao where embarcacao_id=${req.params.id}`
 
     client.query(insertQuery, (err, result)=>{
@@ -54,7 +54,20 @@ const deleteEmbarcacao = (req, res)=> {
     client.end;
 }
 
+module.exports.updateEmbarcacao = (req, res)=> {
+    let emb = req.body;
+    let updateQuery = `update embarcacao
+                       set embarcacao_name = '${emb.name}',
+                       embarcacao_ info= '${emb.info}',
+                       embarcacao_prop_id = '${emb.propId}',
+                       embarcacao_cais_id = '${emb.caisId}'
+                       where embarcacao_id = ${emb.id}`
 
-module.exports = {
-    getEmbarcacoes, getEmbarcacao, addEmbarcacao, deleteEmbarcacao
+    client.query(updateQuery, (err, result)=>{
+        if(!err){
+            res.send('Update was successful')
+        }
+        else{ console.log(err.message) }
+    })
+    client.end;
 }
