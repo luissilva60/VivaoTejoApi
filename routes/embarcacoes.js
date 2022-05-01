@@ -42,7 +42,19 @@ const addEmbarcacao = (req, res) => {
     client.end;
 }
 
+const deleteEmbarcacao = (req, res)=> {
+    let insertQuery = `delete from embarcacao where id=${req.params.id}`
+
+    client.query(insertQuery, (err, result)=>{
+        if(!err){
+            res.send('Deletion was successful')
+        }
+        else{ console.log(err.message) }
+    })
+    client.end;
+}
+
 
 module.exports = {
-    getEmbarcacoes, getEmbarcacao, addEmbarcacao
+    getEmbarcacoes, getEmbarcacao, addEmbarcacao, deleteEmbarcacao
 }
