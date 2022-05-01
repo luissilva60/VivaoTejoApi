@@ -8,3 +8,5 @@ router.get('/api/embarcacao', async function(req, res, next) {
     res.status(result.status).send(result.data);
 
 });
+
+module.exports = router;

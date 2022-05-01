@@ -16,7 +16,7 @@ module.exports.getEmbarcacoes = (request, response) => {
     })
 }
 
-/*module.exports.getEmbarcacao = (request, response) => {
+module.exports.getEmbarcacao = (request, response) => {
     const id = parseInt(request.params.id)
 
     client.query('select * from embarcacao WHERE embarcacao_id = $1',[id], (error, results) => {
@@ -70,4 +70,4 @@ module.exports.updateEmbarcacao = (req, res)=> {
         else{ console.log(err.message) }
     })
     client.end;
-}*/
+}
