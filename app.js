@@ -35,6 +35,7 @@ app.get('/api/utilizador/:id(\\d+)',utilizador.getUser)
 /*                   EMBARCACOES               */
 app.get('/api/embarcacao', embarcacao.getEmbarcacoes);
 app.get('/api/embarcacao/:id(\\d+)',embarcacao.getEmbarcacao)
+app.post('/api/embarcacao', embarcacao.addEmbarcacao);
 
 /*                  EVENTOS              */
 app.get('/api/eventos', eventos.getEventos);

@@ -27,7 +27,22 @@ const getEmbarcacao = (request, response) => {
     })
 }
 
+const addEmbarcacao = (req, res) => {
+    const embarcacao = req.body;
+    let insertQuery = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id,embarcacao_cais_id) 
+    values('${embarcacao.embarcacao_name}', '${embarcacao.embarcacao_info}', '${embarcacao.embarcacao_prop_id}', '${embarcacao.embarcacao_cais_id}')`
+
+    client.query(insertQuery, (err, result)=>{
+        if(!err){
+            res.send('Insertion was sucessful')
+            console.log('Insertion was sucessful');
+        }
+        else{console.log(err.message)}
+    })
+    client.end;
+}
+
 
 module.exports = {
-    getEmbarcacoes, getEmbarcacao
+    getEmbarcacoes, getEmbarcacao, addEmbarcacao
 }
