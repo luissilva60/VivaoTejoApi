@@ -12,7 +12,7 @@ module.exports.getEmbarcacoes = (request, response) => {
         if (error) {
             throw error
         }
-        results = {status : 200, data: results.rows}
+        var results = {status : 200, data: results.rows}
         response.send(results);
     })
 }
