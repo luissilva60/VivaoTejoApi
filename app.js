@@ -37,6 +37,7 @@ app.get('/api/embarcacao', embarcacao.getEmbarcacoes)
 app.get('/api/embarcacao/:id(\\d+)',embarcacao.getEmbarcacao)
 app.post('/api/embarcacao', embarcacao.addEmbarcacao)
 app.delete('/api/embarcacao/:id(\\d+)',embarcacao.deleteEmbarcacao)
+app.put('/api/embarcacao', embarcacao.updateEmbarcacao)
 
 /*                  EVENTOS              */
 app.get('/api/eventos', eventos.getEventos)
