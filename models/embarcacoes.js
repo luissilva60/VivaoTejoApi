@@ -7,7 +7,7 @@ const app = express();
 client.connect();
 
 
-module.exports.getEmbarcacoes = (request, response) => {
+module.exports.getEmbarcacoes = async function() {
     client.query('select * from embarcacao', (error, results) => {
         if (error) {
             throw error
