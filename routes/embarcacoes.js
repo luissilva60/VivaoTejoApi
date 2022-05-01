@@ -43,7 +43,7 @@ const addEmbarcacao = (req, res) => {
 }
 
 const deleteEmbarcacao = (req, res)=> {
-    let insertQuery = `delete from embarcacao where id=${req.params.id}`
+    let insertQuery = `delete from embarcacao where embarcacao_id=${req.params.id}`
 
     client.query(insertQuery, (err, result)=>{
         if(!err){
