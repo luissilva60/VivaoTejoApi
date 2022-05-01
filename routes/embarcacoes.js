@@ -58,7 +58,7 @@ module.exports.updateEmbarcacao = (req, res)=> {
     let emb = req.body;
     let updateQuery = `update embarcacao
                        set embarcacao_name = '${emb.name}',
-                       embarcacao_ info= '${emb.info}',
+                       embarcacao_info= '${emb.info}',
                        embarcacao_prop_id = '${emb.propId}',
                        embarcacao_cais_id = '${emb.caisId}'
                        where embarcacao_id = ${emb.id}`
