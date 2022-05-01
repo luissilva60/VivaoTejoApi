@@ -11,8 +11,9 @@ module.exports.getEmbarcacoes = (request, response) => {
     client.query('select * from embarcacao', (error, results) => {
         if (error) {
             throw error
+            return {status:500, data: error}
         }
-        response.status(200).json(results.rows)
+        return {status:200, data: results.rows}
     })
 }
 
