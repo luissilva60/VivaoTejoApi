@@ -60,7 +60,7 @@ module.exports.addEmbarcacao = async function(embarcacao) {
     }
     try {
         let sql = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id,embarcacao_cais_id) 
-    values('${embarcacao.embarcacao_name}', '${embarcacao.info}', '${embarcacao.propId}', '${embarcacao.caisId}')`
+    values('${embarcacao.name}', '${embarcacao.info}', '${embarcacao.propId}', '${embarcacao.caisId}')`
         let result = await client.query(sql);
         let embarcacoes = result.rows[0];
         console.log("[embarcacaoModel.addEmbarcacao] embarcacao = " + JSON.stringify(embarcacoes));
