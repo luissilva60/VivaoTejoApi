@@ -7,15 +7,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var embarcacoesRouter = require('./routes/embarcacoesRoutes')
 
-const utilizador = require('./models/utilizadores');
-
-const embarcacao = require('./models/embarcacoes');
-
-const eventos = require('./models/eventos');
-
-const artigos = require('./models/artigos');
-
-const cais = require('./models/cais');
+var utilizadoresRouter = require('./routes/utilizadoresRoutes')
 
 var app = express();
 
@@ -30,15 +22,10 @@ app.use('/users', usersRouter)
 
 
 /*                   USER                */
-app.get('/api/utilizador', utilizador.getUsers)
-app.get('/api/utilizador/:id(\\d+)',utilizador.getUser)
+app.use('/api/user', usersRouter)
 
 /*                   EMBARCACOES               */
 app.use('/api/embarcacao', embarcacoesRouter)
-/*app.get('/api/embarcacao/:id(\\d+)',embarcacao.getEmbarcacao)
-app.post('/api/embarcacao', embarcacao.addEmbarcacao)
-app.delete('/api/embarcacao/:id(\\d+)',embarcacao.deleteEmbarcacao)
-app.put('/api/embarcacao', embarcacao.updateEmbarcacao)*/
 
 /*                  EVENTOS              */
 app.get('/api/eventos', eventos.getEventos)
