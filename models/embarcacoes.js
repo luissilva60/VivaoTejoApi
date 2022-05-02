@@ -51,19 +51,28 @@ module.exports.getEmbarcacao = async function(id) {
 
 }
 
-module.exports.addEmbarcacao = (req, res) => {
-    const embarcacao = req.body;
-    let insertQuery = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id,embarcacao_cais_id) 
+module.exports.addEmbarcacao = async function(embarcacao) {
+    if (typeof prod != "object" ) {
+        if (prod.errMsg)
+            return { status: 400, data: { msg: prod.errMsg } };
+        else
+            return { status: 400, data: { msg: "Malformed data" } };
+    }
+    try {
+        let insertQuery = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id,embarcacao_cais_id) 
     values('${embarcacao.embarcacao_name}', '${embarcacao.info}', '${embarcacao.propId}', '${embarcacao.caisId}')`
+        let result = await client.query(sql);
+        let embarcacoes = result.rows[0];
+        console.log("[embarcacaoModel.addEmbarcacao] embarcacao = " + JSON.stringify(embarcacoes));
+        return {status: 200, data: embarcacoes};
+    } catch (err) {
+        console.log(err);
+        if (err.errno == 23503) // FK error
+            return { status: 400, data: { msg: "Type not found" } };
+        else
+            return { status: 500, data: err };
+    }
 
-    client.query(insertQuery, (err, result)=>{
-        if(!err){
-            res.send('Insertion was sucessful')
-            console.log('Insertion was sucessful');
-        }
-        else{console.log(err.message)}
-    })
-    client.end;
 }
 
 module.exports.deleteEmbarcacao = (req, res)=> {

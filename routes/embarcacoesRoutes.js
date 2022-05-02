@@ -16,4 +16,11 @@ router.get('/:id(\\d+)', async function(req, res, next) {
 
 });
 
+router.post('', async function(req, res, next) {
+    let embarcacao = req.body;
+    console.log("[embarcacoesRoutes] Saving boat " + JSON.stringify(newProduct));
+    let result = await embarcacoesModel.addEmbarcacao(embarcacao);
+    res.status(result.status).send(result.data);
+
+});
 module.exports = router;
