@@ -7,7 +7,7 @@ const app = express();
 client.connect();
 
 
-module.exports.getEmbarcacoes = (request, response) => {
+/*module.exports.getEmbarcacoes = (request, response) => {
     client.query('select * from embarcacao', (error, results) => {
         if (error) {
             throw error
@@ -15,6 +15,20 @@ module.exports.getEmbarcacoes = (request, response) => {
         var results = {status : 200, data: results.rows}
         response.send(results);
     })
+}*/
+
+module.exports.getEmbarcacoes = async function() {
+    try {
+        let sql = "select * from embarcacao";
+        let result = await client.query(sql);
+        let embarcacoes = result.rows;
+        console.log("[productsModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
+        return{status: 200, data: embarcacoes}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
 }
 
 module.exports.getEmbarcacao = (request, response) => {
