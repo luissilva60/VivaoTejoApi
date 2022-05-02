@@ -37,7 +37,7 @@ module.exports.getEmbarcacao = async function(id) {
         let sql = 'select * from embarcacao WHERE embarcacao_id = $1';
         let result = await client.query(sql, [id]);
         let embarcacao = result.rows;
-        if (embarcacao.length > 0) {
+        if (embarcacao) {
             console.log("[productsModel.getProduct] product = " + JSON.stringify(embarcacao[0]));
             return { status: 200, data: embarcacao[0] };
         } else {
