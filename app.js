@@ -31,12 +31,12 @@ app.use('/api/embarcacao', embarcacoesRouter)
 var eventosRouter = require('./routes/eventosRoutes')
 app.use('/api/eventos', eventosRouter)
 
-/*                 ARTIGOS
+/*                 ARTIGOS                     */
 var artigosRouter = require('./routes/artigosRoutes')
-app.use('/api/artigos', artigosRouter)*/
+app.use('/api/artigos', artigosRouter)
 
-/*                 CAIS
+/*                 CAIS                        */
 var caisRouter = require('./routes/caisRoutes')
-app.use('/api/cais', caisRouter)*/
+app.use('/api/cais', caisRouter)
 
 module.exports = app;

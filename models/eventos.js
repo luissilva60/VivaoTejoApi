@@ -48,10 +48,10 @@ module.exports.addEvento = async function(evento) {
     }
     try {
         let sql = `insert into eventos (eventos_name, eventos_info, eventos_date, eventos_local, eventos_starttime, eventos_endtime, eventos_state_id) 
-    values('${evento.name}', '${evento.info}', '${evento.date}', ${evento.local}, '${evento.startTime}','${evento.endTime}', ${evento.stateId} )`
+    values('${evento.name}', '${evento.info}', '${evento.date}', '${evento.local}', '${evento.startTime}','${evento.endTime}', ${evento.stateId} )`
         let result = await client.query(sql);
-        let evento = result.rows[0];
-        console.log("[eventosModel.addEvento] Evento= " + JSON.stringify(evento));
+        let newev = result.rows[0];
+        console.log("[eventosModel.addEvento] Evento= " + JSON.stringify(newev));
         return {status: 200, data: "Successfully added an event"};
     } catch (err) {
         console.log(err);
@@ -63,7 +63,7 @@ module.exports.addEvento = async function(evento) {
 module.exports.deleteEvento = async function(id) {
     console.log("[eventosModel.deleteEvento] id = " + JSON.stringify(id));
     try {
-        let sql = `delete from evento where evento_id=${id}`
+        let sql = `delete from eventos where eventos_id=${id}`
         let result = await client.query(sql);
         return {status: 200, data: "Deletion was successful"}
     } catch (err) {
