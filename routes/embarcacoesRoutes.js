@@ -8,7 +8,7 @@ router.get('', async function(req, res, next) {
     res.status(result.status).send(result.data);
 
 });
-router.get('/:id(\\\\d+)', async function(req, res, next) {
+router.get('/:id(\\d+)', async function(req, res, next) {
     let id = req.params.id
     console.log("[embarcacoesRoutes] boat with id: "+ id);
     let result = await embarcacoesModel.getEmbarcacao(id);
