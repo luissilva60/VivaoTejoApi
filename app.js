@@ -4,11 +4,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 
-var embarcacoesRouter = require('./routes/embarcacoesRoutes')
-var utilizadoresRouter = require('./routes/utilizadoresRoutes')
-var eventosRouter = require('./routes/eventosRoutes')
-var caisRouter = require('./routes/caisRoutes')
-var artigosRouter = require('./routes/artigosRoutes')
+
+
+
+
+
 
 
 var app = express();
@@ -19,19 +19,24 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-/*                   USER                */
+/*                   USER                      */
+var utilizadoresRouter = require('./routes/utilizadoresRoutes')
 app.use('/api/user', utilizadoresRouter)
 
 /*                   EMBARCACOES               */
+var embarcacoesRouter = require('./routes/embarcacoesRoutes')
 app.use('/api/embarcacao', embarcacoesRouter)
 
-/*                  EVENTOS
-app.use('/api/eventos', eventosRouter)*/
+/*                  EVENTOS                    */
+var eventosRouter = require('./routes/eventosRoutes')
+app.use('/api/eventos', eventosRouter)
 
 /*                 ARTIGOS
+var artigosRouter = require('./routes/artigosRoutes')
 app.use('/api/artigos', artigosRouter)*/
 
 /*                 CAIS
+var caisRouter = require('./routes/caisRoutes')
 app.use('/api/cais', caisRouter)*/
 
 module.exports = app;
