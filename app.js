@@ -3,11 +3,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var embarcacoesRouter = require('./routes/embarcacoesRoutes')
 
+var embarcacoesRouter = require('./routes/embarcacoesRoutes')
 var utilizadoresRouter = require('./routes/utilizadoresRoutes')
+var eventosRouter = require('./routes/eventosRoutes')
+var caisRouter = require('./routes/caisRoutes')
+var artigosRouter = require('./routes/artigosRoutes')
+
 
 var app = express();
 
@@ -17,28 +19,19 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/    ', indexRouter)
-app.use('/users', usersRouter)
-
-
 /*                   USER                */
-app.use('/api/user', usersRouter)
+app.use('/api/user', utilizadoresRouter)
 
 /*                   EMBARCACOES               */
 app.use('/api/embarcacao', embarcacoesRouter)
 
 /*                  EVENTOS              */
-app.get('/api/eventos', eventos.getEventos)
-app.get('/api/eventos/:id(\\d+)',eventos.getEvento)
+app.use('/api/eventos', eventosRouter)
 
 /*                 ARTIGOS             */
-app.get('/api/artigos', artigos.getArtigos)
-app.get('/api/artigos/:id(\\d+)',artigos.getArtigo)
-
+app.use('/api/artigos', artigosRouter)
 
 /*                 CAIS            */
-app.get('/api/cais', cais.getCais)
-app.get('/api/cais/:id(\\d+)',cais.get1Cais)
-
+app.use('/api/cais', caisRouter)
 
 module.exports = app;
