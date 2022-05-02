@@ -52,9 +52,9 @@ module.exports.getEmbarcacao = async function(id) {
 }
 
 module.exports.addEmbarcacao = async function(embarcacao) {
-    if (typeof prod != "object" ) {
-        if (prod.errMsg)
-            return { status: 400, data: { msg: prod.errMsg } };
+    if (typeof embarcacao != "object" ) {
+        if (embarcacao.errMsg)
+            return { status: 400, data: { msg: embarcacao.errMsg } };
         else
             return { status: 400, data: { msg: "Malformed data" } };
     }
