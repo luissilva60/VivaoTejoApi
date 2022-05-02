@@ -56,10 +56,7 @@ module.exports.addEmbarcacao = async function(embarcacao) {
         return {status: 200, data: embarcacoes};
     } catch (err) {
         console.log(err);
-        if (err.errno == 23503) // FK error
-            return { status: 400, data: { msg: "Type not found" } };
-        else
-            return { status: 500, data: err };
+        return { status: 500, data: err };
     }
 
 }
@@ -77,20 +74,26 @@ module.exports.deleteEmbarcacao = async function(id) {
 
 }
 
-module.exports.updateEmbarcacao = (req, res)=> {
-    let emb = req.body;
-    let updateQuery = `update embarcacao
-                       set embarcacao_name = '${emb.name}',
-                       embarcacao_info= '${emb.info}',
-                       embarcacao_prop_id = '${emb.propId}',
-                       embarcacao_cais_id = '${emb.caisId}'
-                       where embarcacao_id = ${emb.id}`
+module.exports.updateEmbarcacao = async function(embarcacao) {
+    if (typeof embarcacao != "object" ) {
+        if (embarcacao.errMsg)
+            return { status: 400, data: { msg: embarcacao.errMsg } };
+        else
+            return { status: 400, data: { msg: "Malformed data" } };
+    } try {
+        let updateQuery = `update embarcacao
+                       set embarcacao_name = '${embarcacao.name}',
+                       embarcacao_info= '${embarcacao.info}',
+                       embarcacao_prop_id = '${embarcacao.propId}',
+                       embarcacao_cais_id = '${embarcacao.caisId}'
+                       where embarcacao_id = ${embarcacao.id}`
+        let result = await client.query(updateQuery);
+        let embarcacao = result.rows[0];
 
-    client.query(updateQuery, (err, result)=>{
-        if(!err){
-            res.send('Update was successful')
-        }
-        else{ console.log(err.message) }
-    })
-    client.end;
+        console.log("[embarcacaoModel.updateEmbarcacao] embarcacao = " + JSON.stringify(embarcacoes));
+        return {status: 200, data: "Updated succesfully"};
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
 }
