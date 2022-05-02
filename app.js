@@ -25,13 +25,13 @@ app.use('/api/user', utilizadoresRouter)
 /*                   EMBARCACOES               */
 app.use('/api/embarcacao', embarcacoesRouter)
 
-/*                  EVENTOS              */
-app.use('/api/eventos', eventosRouter)
+/*                  EVENTOS
+app.use('/api/eventos', eventosRouter)*/
 
-/*                 ARTIGOS             */
-app.use('/api/artigos', artigosRouter)
+/*                 ARTIGOS
+app.use('/api/artigos', artigosRouter)*/
 
-/*                 CAIS            */
-app.use('/api/cais', caisRouter)
+/*                 CAIS
+app.use('/api/cais', caisRouter)*/
 
 module.exports = app;
