@@ -19,7 +19,7 @@ client.connect();
 
 module.exports.getEmbarcacoes = async function() {
     try {
-        let sql = "select * from embarcacao";
+        let sql = 'select * from embarcacao';
         let result = await client.query(sql);
         let embarcacoes = result.rows;
         console.log("[productsModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
@@ -34,7 +34,7 @@ module.exports.getEmbarcacoes = async function() {
 module.exports.getEmbarcacao = async function(id) {
 
     try {
-        let sql = "select * from embarcacao WHERE embarcacao_id = $1";
+        let sql = 'select * from embarcacao WHERE embarcacao_id = $1';
         let result = await client.query(sql, [id]);
         let embarcacao = result.rows;
         if (embarcacao.length > 0) {
