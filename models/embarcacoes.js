@@ -32,7 +32,7 @@ module.exports.getEmbarcacoes = async function() {
 }
 
 module.exports.getEmbarcacao = async function(id) {
-
+    console.log("[embarcacaoModel.getEmbarcacao] id = " + JSON.stringify(id));
     try {
         let sql = 'select * from embarcacao WHERE embarcacao_id = $1';
         let result = await client.query(sql, [id]);
