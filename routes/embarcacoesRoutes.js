@@ -23,4 +23,12 @@ router.post('', async function(req, res, next) {
     res.status(result.status).send(result.data);
 
 });
+
+router.delete('/:id(\\d+)', async function(req, res, next) {
+    let id = req.params.id
+    console.log("[embarcacoesRoutes] Deleting boat with id: "+ id);
+    let result = await embarcacoesModel.deleteEmbarcacao(id);
+    res.status(result.status).send(result.data);
+
+});
 module.exports = router;

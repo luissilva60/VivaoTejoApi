@@ -6,17 +6,6 @@ const app = express();
 
 client.connect();
 
-
-/*module.exports.getEmbarcacoes = (request, response) => {
-    client.query('select * from embarcacao', (error, results) => {
-        if (error) {
-            throw error
-        }
-        var results = {status : 200, data: results.rows}
-        response.send(results);
-    })
-}*/
-
 module.exports.getEmbarcacoes = async function() {
     try {
         let sql = 'select * from embarcacao';
@@ -75,16 +64,17 @@ module.exports.addEmbarcacao = async function(embarcacao) {
 
 }
 
-module.exports.deleteEmbarcacao = (req, res)=> {
-    let insertQuery = `delete from embarcacao where embarcacao_id=${req.params.id}`
+module.exports.deleteEmbarcacao = async function(id) {
+    console.log("[embarcacaoModel.deleteEmbarcacao] id = " + JSON.stringify(id));
+    try {
+        let sql = `delete from embarcacao where embarcacao_id=${id}`
+        let result = await client.query(sql);
+        return {status: 200, data: "Deletion was successful"}
+    } catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
 
-    client.query(insertQuery, (err, result)=>{
-        if(!err){
-            res.send('Deletion was successful')
-        }
-        else{ console.log(err.message) }
-    })
-    client.end;
 }
 
 module.exports.updateEmbarcacao = (req, res)=> {
