@@ -36,15 +36,15 @@ module.exports.getEmbarcacao = async function(id) {
     try {
         let sql = 'select * from embarcacao WHERE embarcacao_id = $1';
         let result = await client.query(sql, [id]);
-        let embarcacao = result.rows;
-        if (embarcacao) {
-            console.log("[productsModel.getProduct] product = " + JSON.stringify(embarcacao[0]));
-            return { status: 200, data: embarcacao[0] };
+        let embarcacoes = result.rows;
+        if (embarcacoes.length > 0) {
+            console.log("[productsModel.getProduct] product = " + JSON.stringify(embarcacoes[0]));
+            return { status: 200, data: embarcacoes[0] };
         } else {
             return { status: 404, data: { msg: "Product not found." } };
         }
 
-    }catch (err) {
+    } catch (err) {
         console.log(err);
         return { status: 500, data: err };
     }
