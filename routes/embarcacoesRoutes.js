@@ -16,7 +16,7 @@ router.get('/:id(\\d+)', async function(req, res, next) {
 
 });
 
-router.post('', async function(req, res, next) {
+router.post('/new', async function(req, res, next) {
     let embarcacao = req.body;
     console.log("[embarcacoesRoutes] Saving boat " + JSON.stringify(embarcacao));
     let result = await embarcacoesModel.addEmbarcacao(embarcacao);
@@ -32,7 +32,7 @@ router.delete('/:id(\\d+)', async function(req, res, next) {
 
 });
 
-router.put('', async function(req, res, next) {
+router.put('/update', async function(req, res, next) {
     let embarcacao = req.body;
     console.log("[embarcacoesRoutes] Updating boat " + JSON.stringify(embarcacao));
     let result = await embarcacoesModel.updateEmbarcacao(embarcacao);

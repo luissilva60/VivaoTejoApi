@@ -53,7 +53,7 @@ module.exports.addEmbarcacao = async function(embarcacao) {
         let result = await client.query(sql);
         let embarcacoes = result.rows[0];
         console.log("[embarcacaoModel.addEmbarcacao] embarcacao = " + JSON.stringify(embarcacoes));
-        return {status: 200, data: embarcacoes};
+        return {status: 200, data: "Successfully added a boat"};
     } catch (err) {
         console.log(err);
         return { status: 500, data: err };
