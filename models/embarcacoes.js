@@ -31,15 +31,24 @@ module.exports.getEmbarcacoes = async function() {
 
 }
 
-module.exports.getEmbarcacao = (request, response) => {
-    const id = parseInt(request.params.id)
+module.exports.getEmbarcacao = async function(id) {
 
-    client.query('select * from embarcacao WHERE embarcacao_id = $1',[id], (error, results) => {
-        if (error) {
-            throw error
+    try {
+        let sql = "select * from embarcacao WHERE embarcacao_id = $1";
+        let result = await client.query(sql, [id]);
+        let embarcacao = result.rows;
+        if (embarcacao.length > 0) {
+            console.log("[productsModel.getProduct] product = " + JSON.stringify(embarcacao[0]));
+            return { status: 200, data: embarcacao[0] };
+        } else {
+            return { status: 404, data: { msg: "Product not found." } };
         }
-        response.status(200).json(results.rows)
-    })
+
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
 }
 
 module.exports.addEmbarcacao = (req, res) => {
