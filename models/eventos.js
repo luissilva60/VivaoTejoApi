@@ -47,11 +47,11 @@ module.exports.addEvento = async function(evento) {
             return { status: 400, data: { msg: "Malformed data" } };
     }
     try {
-        let sql = `insert into eventos(eventos_name, eventos_info, eventos_date, eventos_local, eventos_starttime, eventos_endtime, eventos_state_id) 
+        let sql = `insert into eventos (eventos_name, eventos_info, eventos_date, eventos_local, eventos_starttime, eventos_endtime, eventos_state_id) 
     values('${evento.name}', '${evento.info}', '${evento.date}', ${evento.local}, '${evento.startTime}','${evento.endTime}', ${evento.stateId} )`
         let result = await client.query(sql);
-        let users = result.rows[0];
-        console.log("[eventosModel.addEvento] Evento= " + JSON.stringify(users));
+        let evento = result.rows[0];
+        console.log("[eventosModel.addEvento] Evento= " + JSON.stringify(evento));
         return {status: 200, data: "Successfully added an event"};
     } catch (err) {
         console.log(err);
