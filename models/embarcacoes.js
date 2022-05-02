@@ -88,9 +88,9 @@ module.exports.updateEmbarcacao = async function(embarcacao) {
                        embarcacao_cais_id = '${embarcacao.caisId}'
                        where embarcacao_id = ${embarcacao.id}`
         let result = await client.query(updateQuery);
-        let embarcacao = result.rows[0];
 
-        console.log("[embarcacaoModel.updateEmbarcacao] embarcacao = " + JSON.stringify(embarcacoes));
+
+        console.log("[embarcacaoModel.updateEmbarcacao] embarcacao = " + JSON.stringify(embarcacao));
         return {status: 200, data: "Updated succesfully"};
     }catch (err) {
         console.log(err);
