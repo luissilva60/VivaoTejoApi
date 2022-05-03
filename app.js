@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 /*                   USER                      */
 var utilizadoresRouter = require('./routes/utilizadoresRoutes')
-app.use('/api/user', utilizadoresRouter)
+app.use('/api/utilizador', utilizadoresRouter)
 
 /*                   EMBARCACOES               */
 var embarcacoesRouter = require('./routes/embarcacoesRoutes')
