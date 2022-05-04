@@ -40,4 +40,13 @@ router.put('/update', async function(req, res, next) {
 
 });
 
+router.get('/:email(\\d+)/:password(\\d+)', async function(req, res, next) {
+    let email = req.params.email;
+    let password = req.params.password;
+    console.log("[UtilizadoresRoutes] Login with email: "+ email + " and password = "+password);
+    let result = await userModel.getUserLogin(email, password);
+    res.status(result.status).send(result.data);
+
+});
+
 module.exports = router;
