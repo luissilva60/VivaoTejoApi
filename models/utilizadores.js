@@ -100,7 +100,7 @@ module.exports.getUserLogin = async function(email, password) {
     console.log("[userModel.getUser] Login = Email: " + JSON.stringify(email)+ " Password: "+ + JSON.stringify(password));
     try {
         let sql = `select * from utilizador WHERE utilizador_email = '${email}' AND utilizador_password = '${password}'`;
-        let result = await client.query(sql, [email], [password]);
+        let result = await client.query(sql);
         let user = result.rows;
         if (user.length > 0) {
             console.log("[userModel.getUser] user = " + JSON.stringify(user[0]));
