@@ -69,19 +69,10 @@
 
         <h2 id="info2"></h2>
         <h3 id="info"></h3>
-        <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
         <input id="pac-input" class="controls" type="text" placeholder="Search Box">
         <div id="map"></div>
 
 
-
-        <ul class="geo-data">
-            <li>Full Address: <span id="location"></span></li>
-            <li>Postal Code: <span id="postal_code"></span></li>
-            <li>Country: <span id="country"></span></li>
-            <li>Latitude: <span id="lat"></span></li>
-            <li>Longitude: <span id="lon"></span></li>
-        </ul>
 
     </div>
     <script>
@@ -104,7 +95,41 @@
             //link map options to actual map
             let map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
+            ///// GEo coding teste
+            var places = searchBox.getPlaces();
+            if (places.length == 0) {
+                return;
+            }
+            for (var i = 0, marker; marker = markers[i]; i++) {
+                marker.setMap(null);
+            }
 
+            // For each place, get the icon, place name, and location.
+            markers = [];
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0, place; place = places[i]; i++) {
+                var image = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+
+                // Create a marker for each place.
+                var marker = new google.maps.Marker({
+                    map: map,
+                    icon: image,
+                    title: place.name,
+                    position: place.geometry.location
+                });
+
+                markers.push(marker);
+
+                bounds.extend(place.geometry.location);
+            }
+
+            map.fitBounds(bounds);
 
 
             //GEo Coding search bar
@@ -185,8 +210,7 @@
                 position: new google.maps.LatLng(38.654205708390336, -8.994321577976788),
                 title: 'Evento Marinha do Tejo',
                 optimized: true,
-                animation: google.maps.Animation.BOUNCE,
-                content:'<h1>asdasdasdasdasdasasd</h1>'
+                animation: google.maps.Animation.BOUNCE
 
 
             }
