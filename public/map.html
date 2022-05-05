@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=Ddevice-width, initi-scale1.0">
+    <title>Document</title>
+
+    <style>
+        /*Container to center the map*/
+        #container{
+            height: 100vh;
+            display:  flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #map{
+            height: 80vh;
+            width: 80vw;
+        }
+        html, body{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+
+        <h2 id="info2"></h2>
+        <h3 id="info"></h3>
+        <div id="map"></div>
+
+    </div>
+    <script>
+        function initMap(){
+
+            //Map options
+            let mapOptions = {
+                center: new google.maps.LatLng('38.654077198334306', '-8.99502557883541'),
+                zoom: 17,
+                mapTypeId: 'roadmap',/*
+                mapTypeControlOptions:{
+                    mapTypeIds:['roadmap', 'hybrid']
+                }*/
+                mapId: 'f7dc6b907125f67f'
+
+            }
+            //link map options to actual map
+            let map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            //Add a marker
+            let markerOptions = {
+                position: new google.maps.LatLng(38.654205708390336, -8.994321577976788),
+                title: 'Evento Marinha do Tejo',
+                optimized: true,
+                animation: google.maps.Animation.BOUNCE
+
+
+            }
+
+            let marker = new google.maps.Marker(markerOptions)
+
+            marker.setIcon('../images/EventoMarker.png')
+            marker.setLabel('Evento Marinha do Tejo')
+
+
+
+            marker.addListener('click', (googleMapsEvent)=>{
+                document.getElementById('info').innerHTML = 'latitude:' + googleMapsEvent.latLng.lat()  + ' longitude:' + googleMapsEvent.latLng.lng()
+            }, 5000)
+
+            marker.setMap(map);
+            document.getElementById('info2').innerHTML = marker.getAnimation();
+
+            setTimeout(()=>{
+                marker.setAnimation(null);
+                document.getElementById('info2').innerHTML = marker.getAnimation();
+            }, 5000)
+
+
+
+            /*map.setTilt(45);*/
+
+            /*delete marker after 3 seconds
+
+            setTimeout(()=> {
+                marker.setMap(null);
+            }, 3000);*/
+
+
+
+
+            //document.getElementById('info').innerHTML = "MAPA Teste";
+
+
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXJMCul0dV0qlry9bSDTx9K9dKRLJZSY&callback=initMap"></script>
+
+
+</body>
+</html>
