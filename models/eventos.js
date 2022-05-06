@@ -7,7 +7,7 @@ const app = express();
 client.connect();
 module.exports.getEventos = async function() {
     try {
-        let sql = 'select *, st_x(eventos_local), st_y(eventos_local) from eventos';
+        let sql = 'select * from eventos';
         let result = await client.query(sql);
         let eventos = result.rows;
         console.log("[eventosModel.getEventos] eventos = " + JSON.stringify(eventos));
