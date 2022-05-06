@@ -84,9 +84,27 @@
         </ul>
 
     </div>
-    <script src="./javascripts/cais.js"> </script>
+    <!-- <script src="./javascripts/cais.js"> </script> -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
+
+        let cais;
+        let html;
+        var caisGeoJson;
+        const api_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/cais/1'
+        async function getCais(){
+            const response=await fetch(api_url);
+            const data=await response.json ();
+            //const { geojson } = data;
+            console.log(data);
+            console.log(data.geojson);
+
+            caisGeoJson = data.geojson;
+
+            cosole.log(caisGeoJson.coordinates);
+
+        }
+        getCais();
 
 
         function initMap(){
@@ -159,7 +177,7 @@
                 infowindow.open (map, marker);
             });*/
             map.data.loadGeoJson(
-                "https://storage.googleapis.com/mapsdevsite/json/google.json"
+                caisGeoJson
             );
 
 
@@ -177,7 +195,7 @@
 
 
             var myPolygon = new google.maps.Polygon({
-                paths: polygoneCoords,
+                polygoneCoords: caisGeoJson,
                 strokeColor: '#FF0000',
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
