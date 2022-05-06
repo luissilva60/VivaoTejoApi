@@ -84,6 +84,8 @@
         </ul>
 
     </div>
+    <script src="./javascripts/cais.js"> </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
 
 
@@ -156,6 +158,10 @@
                 infowindow.setcontent ('<div><strong>' + place.name + '</strong><br>' + address);
                 infowindow.open (map, marker);
             });*/
+            map.data.loadGeoJson(
+                "https://storage.googleapis.com/mapsdevsite/json/google.json"
+            );
+
 
             // Add a polygon
             var polygoneCoords = [
