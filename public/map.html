@@ -90,21 +90,57 @@
 
         let cais;
         let html;
+
         var caisGeoJson;
-        const api_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/cais/1'
+        var locais
+
+
+        const api_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/cais'
         async function getCais(){
             const response=await fetch(api_url);
             const data=await response.json ();
+
             //const { geojson } = data;
             console.log(data);
-            console.log(data.geojson);
+            for (i=0;i<data. length;i=i+1) {
+                console.log(data[i].geojson)
 
-            caisGeoJson = data.geojson;
 
-            cosole.log(caisGeoJson.coordinates);
+            }
+
+
+            
+
+
+
 
         }
         getCais();
+
+        const api_url2='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/eventos'
+        async function getEventos(){
+            const response=await fetch(api_url2);
+            const data=await response.json ();
+            //const { geojson } = data;
+            console.log(data);
+            for (i=0;i<data. length;i=i+1) {
+                console.log(data[i].eventos_local)
+                localStorage.setItem("eventos_local", JSON.stringify(data[i].evento_local))
+
+
+            }
+             locais = localStorage.getItem("eventos_local")
+
+            console.log(locais)
+
+
+
+
+        }
+        getEventos();
+
+
+
 
 
         function initMap(){
@@ -195,7 +231,7 @@
 
 
             var myPolygon = new google.maps.Polygon({
-                polygoneCoords: caisGeoJson,
+                paths: caisGeoJson,
                 strokeColor: '#FF0000',
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
