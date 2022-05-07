@@ -88,22 +88,16 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
 
-        let cais;
-        let html;
-
-        var caisGeoJson;
-        var locais
-
 
         const api_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/cais'
         async function getCais(){
             const response=await fetch(api_url);
-            const data=await response.json ();
+            const data2=await response.json();
 
             //const { geojson } = data;
-            console.log(data);
-            for (i=0;i<data. length;i=i+1) {
-                console.log(data[i].geojson)
+            //console.log(data);
+            for (i=0;i<data2. length;i=i+1) {
+                //console.log(data[i].geojson)
 
 
             }
@@ -117,27 +111,8 @@
         }
         getCais();
 
-        const api_url2='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/eventos'
-        async function getEventos(){
-            const response=await fetch(api_url2);
-            const data=await response.json ();
-            //const { geojson } = data;
-            console.log(data);
-            for (i=0;i<data. length;i=i+1) {
-                console.log(data[i].eventos_local)
-                localStorage.setItem("eventos_local", JSON.stringify(data[i].evento_local))
 
 
-            }
-             locais = localStorage.getItem("eventos_local")
-
-            console.log(locais)
-
-
-
-
-        }
-        getEventos();
 
 
 
@@ -161,8 +136,35 @@
             let map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
 
+            const infowindow = new google.maps.InfoWindow()
+
+            const api_url2='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/eventos'
+            async function getEventos(){
+                const response=await fetch(api_url2);
+                const locations=await response.json();
+
+                console.log(locations);
+
+                for (i = 0; i < locations.length; i++) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(locations[i].eventos_local.x, locations[i].eventos_local.y),
+                        map: map
+                    });
+
+                    marker.setIcon('../images/EventoMarker.png')
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindow.setContent(locations[i].eventos_name);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
 
 
+
+            }
+
+            getEventos();
             //GEo Coding search bar
             /*var input =document.getElementById('searchInput');
             map.controls[google.maps.ControlPosition.TOP_LEFT]-push(input)
@@ -212,12 +214,33 @@
                 infowindow.setcontent ('<div><strong>' + place.name + '</strong><br>' + address);
                 infowindow.open (map, marker);
             });*/
-            map.data.loadGeoJson(
-                caisGeoJson
-            );
 
 
             // Add a polygon
+
+            const api_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/cais'
+            async function getCais(){
+                const response=await fetch(api_url);
+                const cais=await response.json();
+
+                for (i=0;i<cais.length;i=i+1) {
+                    map.data.addGeoJson(
+                        cais[i].geojson
+                    );
+                }
+
+                map.data.loadGeoJson(
+
+                );
+            }
+            getCais();
+
+
+
+
+
+
+
             var polygoneCoords = [
                 {lat: 38.653832143997676 , lng: -8.995290023061667},
                 {lat: 38.65486960471314, lng: -8.995866832853059},
@@ -231,7 +254,7 @@
 
 
             var myPolygon = new google.maps.Polygon({
-                paths: caisGeoJson,
+                paths: polygoneCoords,
                 strokeColor: '#FF0000',
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
@@ -240,8 +263,68 @@
             });
 
             myPolygon.setMap(map);
+
+            //Geolocation
+            //Geolocation
+            //Geolocation
+            //Geolocation
+
+            const infoWindoGeolocation = new google.maps.InfoWindow()
+
+            const locationButton = document.createElement("button");
+
+            locationButton.textContent = "Current location";
+            locationButton.classList.add("custom-map-control-button");
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+            locationButton.addEventListener("click", () => {
+                // Try HTML5 geolocation.
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                            };
+                            markerGeolocation = new google.maps.Marker({
+                                position: new google.maps.LatLng(pos.lat, pos.lng),
+                                map: map
+                            });
+
+                            markerGeolocation.setIcon('../images/location.png')
+                            google.maps.event.addListener(markerGeolocation, 'click', (function(marker) {
+                                return function() {
+                                    infowindow.setContent("Você está aqui");
+                                    infowindow.open(map, marker);
+                                }
+                            })(markerGeolocation));
+                            map.setCenter(pos);
+                        },
+                        () => {
+                            handleLocationError(true, infoWindoGeolocation, map.getCenter());
+                        }
+                    );
+                } else {
+                    // Browser doesn't support Geolocation
+                    handleLocationError(false, infoWindoGeolocation, map.getCenter());
+                }
+            });
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(
+                browserHasGeolocation
+                    ? "Error: The Geolocation service failed."
+                    : "Error: Your browser doesn't support geolocation."
+            );
+
             //Add a marker
-            let markerOptions = {
+            //Add a marker
+            //Add a marker
+            //Add a marker
+
+
+            /*let markerOptions = {
                 position: new google.maps.LatLng(38.654205708390336, -8.994321577976788),
                 title: 'Evento Marinha do Tejo',
                 optimized: true,
@@ -291,7 +374,7 @@
                 marker1.setAnimation(null);
                 document.getElementById('info2').innerHTML = marker1.getAnimation();
             }, 5000)
-
+*/
 
 
             /*map.setTilt(45);*/
@@ -309,6 +392,7 @@
 
 
         }
+
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXJMCul0dV0qlry9bSDTx9K9dKRLJZSY&callback=initMap"></script>
