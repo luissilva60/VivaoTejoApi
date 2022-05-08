@@ -8,7 +8,7 @@ window.onload = async function() {
         const data=await response.json ();
         //const { geojson } = data;
         console.log(data);
-        console.log(data.geojson[1]);
+        console.log(data.geojson);
 
     }
     getCais();

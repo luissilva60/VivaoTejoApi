@@ -81,23 +81,6 @@
     <script>
 
 
-        const api_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/cais'
-        async function getCais(){
-            const response=await fetch(api_url);
-            const data2=await response.json();
-
-            //const { geojson } = data;
-            //console.log(data);
-            console.log(data2.geojson)
-
-
-            
-
-
-
-
-        }
-        getCais();
 
 
 
@@ -211,7 +194,11 @@
                 const response=await fetch(api_url);
                 const cais=await response.json();
 
-                console.log(cais.geojson.coordinates)
+                console.log(JSON.parse(cais[0].geojson))
+
+                const ParseCais = JSON.parse(cais[0].geojson)
+                console.log(ParseCais.coordinates)
+
 
             }
             getCais();
