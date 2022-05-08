@@ -69,19 +69,11 @@
 
         <h2 id="info2"></h2>
         <h3 id="info"></h3>
-        <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
-        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+
+        <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
         <div id="map"></div>
 
 
-
-        <ul class="geo-data">
-            <li>Full Address: <span id="location"></span></li>
-            <li>Postal Code: <span id="postal_code"></span></li>
-            <li>Country: <span id="country"></span></li>
-            <li>Latitude: <span id="lat"></span></li>
-            <li>Longitude: <span id="lon"></span></li>
-        </ul>
 
     </div>
     <!-- <script src="./javascripts/cais.js"> </script> -->
@@ -96,11 +88,7 @@
 
             //const { geojson } = data;
             //console.log(data);
-            for (i=0;i<data2. length;i=i+1) {
-                //console.log(data[i].geojson)
-
-
-            }
+            console.log(data2.geojson)
 
 
             
@@ -223,15 +211,8 @@
                 const response=await fetch(api_url);
                 const cais=await response.json();
 
-                for (i=0;i<cais.length;i=i+1) {
-                    map.data.addGeoJson(
-                        cais[i].geojson
-                    );
-                }
+                console.log(cais.geojson.coordinates)
 
-                map.data.loadGeoJson(
-
-                );
             }
             getCais();
 
@@ -308,7 +289,7 @@
                     handleLocationError(false, infoWindoGeolocation, map.getCenter());
                 }
             });
-        }
+
 
         function handleLocationError(browserHasGeolocation, infoWindow, pos) {
             infoWindow.setPosition(pos);
@@ -317,6 +298,7 @@
                     ? "Error: The Geolocation service failed."
                     : "Error: Your browser doesn't support geolocation."
             );
+        }
 
             //Add a marker
             //Add a marker
@@ -389,8 +371,6 @@
 
 
             //document.getElementById('info').innerHTML = "MAPA Teste";
-
-
         }
 
 

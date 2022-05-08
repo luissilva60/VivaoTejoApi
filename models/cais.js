@@ -23,7 +23,7 @@ module.exports.getCais = async function() {
 module.exports.get1Cais = async function(id) {
     console.log("[caisModel.get1Cais] id = " + JSON.stringify(id));
     try {
-        let sql = 'select *,ST_AsGeoJSON(cais_spot) geojson from cais WHERE cais_id = $1';
+        let sql = 'select *,st_asgeojson(cais_spot) Geojson from cais WHERE cais_id = $1';
         let result = await client.query(sql, [id]);
         let cais = result.rows;
         if (cais.length > 0) {
