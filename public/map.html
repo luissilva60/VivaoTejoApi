@@ -30,6 +30,49 @@
              outline: none;
              box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
+
+
+
+        /* CSS */
+         .button{
+             background-color: #0095ff;
+             border: 1px solid transparent;
+             border-radius: 3px;
+             box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+             box-sizing: border-box;
+             color: #fff;
+             cursor: pointer;
+             display: inline-block;
+             font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+             font-size: 13px;
+             font-weight: 400;
+             line-height: 1.15385;
+             margin: 0;
+             outline: none;
+             padding: 8px .8em;
+             position: relative;
+             text-align: center;
+             text-decoration: none;
+             user-select: none;
+             -webkit-user-select: none;
+             touch-action: manipulation;
+             vertical-align: baseline;
+             white-space: nowrap;
+         }
+
+        .button:hover,
+        .button:focus {
+            background-color: #07c;
+        }
+
+        .button:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+        }
+
+        .button:active {
+            background-color: #0064bd;
+            box-shadow: none;
+        }
         #pac-input {
             background-color: #fff;
             font-family: Roboto;
@@ -70,7 +113,8 @@
         <h2 id="info2"></h2>
         <h3 id="info"></h3>
 
-        <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+        <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
+        <button id="button" class="button" role="button">Current Location</button>
         <div id="map"></div>
 
 
@@ -114,6 +158,8 @@
                 const response=await fetch(api_url2);
                 const locations=await response.json();
 
+
+
                 console.log(locations);
 
                 for (i = 0; i < locations.length; i++) {
@@ -125,7 +171,8 @@
                     marker.setIcon('../images/EventoMarker.png')
                     google.maps.event.addListener(marker, 'click', (function(marker, i) {
                         return function() {
-                            infowindow.setContent(locations[i].eventos_name);
+                            infowindow.setContent("Nome: " + locations[i].eventos_name + "<br>Info: " + locations[i].eventos_info + "<br>Date: "+ locations[i].eventos_date + "<br>Start Time: "+  locations[i].eventos_starttime  + "<br>End Time: "+ locations[i].eventos_endtime );
+
                             infowindow.open(map, marker);
                         }
                     })(marker, i));
@@ -136,55 +183,6 @@
             }
 
             getEventos();
-            //GEo Coding search bar
-            /*var input =document.getElementById('searchInput');
-            map.controls[google.maps.ControlPosition.TOP_LEFT]-push(input)
-
-            var infowindow = new google.maps.Infowindow();
-            var marker = new google.maps.Marker ({
-                map: map,
-                anchorPoint: new google.maps. Point (0, -29)
-            });
-
-
-
-            autocomplete.addListener ('place_changed', function() {
-                infowindow.close();
-                marker.setvisible(false);
-                var place = autocomplete.getPlace();
-                if (!place.geometry) {
-                    window.aler("Autcomplete's returned place contains no geometry");
-                    return;
-                }
-                // If the place hasageometry, then present it onamap.
-                if (place.geometry.viewport) {
-                    map.fitBounds(place.geometry.viewport);
-                } else {
-                    map.setCenter(place.geometry.location);
-                    map.setZoom(17);
-                }
-                marker.setIcon(({
-                    url: place.icon,
-                    size: new google.maps.Size(71, 71),
-                    origin: new google.maps.Point(0, 0),
-                    anchor: new google.maps.Point(17, 34),
-                    scaledsize: new google.maps.Size(35, 35)
-                }));
-                marker.setPosition(place.geometry.location);
-                marker.setvisible(true);
-
-                var address = '';
-                if (place.address_components){
-                    address = [
-                        (place.address_components[0] && place.address_components[0].short_name || ''),
-                        (place.address_components[1] && place.address_components[1].short_name || ''),
-                            (place.address_components[2] && place.address_components[2].short_name || '')
-                    ].join(' ');
-                }
-
-                infowindow.setcontent ('<div><strong>' + place.name + '</strong><br>' + address);
-                infowindow.open (map, marker);
-            });*/
 
 
             // Add a polygon
@@ -197,34 +195,44 @@
                 for (i = 0; i < cais.length; i++) {
                     var ParseCais = JSON.parse(cais[i].geojson)
                     console.log(ParseCais.coordinates)
-                }
+                    console.log(cais[i].cais_name)
+                    var nomeCais = cais[i].cais_name;
+                    var infoCais = cais[i].cais_info;
 
-                var bounds = new google.maps.LatLngBounds();
-                for (var y = 0; y < cais.length; y++) {
-                    var shell = ParseCais.coordinates[y];
-                    var latLngArray = [];
-                    var length = Object.keys(shell).length;
-                    console.log(length);
-                    for (var i = 0; i < shell.length; i++) {
-                        console.log("Latitude: " + shell[i][0]);
-                        console.log("Longitude: "+ shell[i][1]);
-                        var pt = new google.maps.LatLng(shell[i][0], shell[i][1]);
-                        bounds.extend(pt);
-                        latLngArray.push(pt);
+                    var bounds = new google.maps.LatLngBounds();
+                    for (var y = 0; y < cais.length; y++) {
+                        var shell = ParseCais.coordinates[y];
+                        var latLngArray = [];
+                        var length = Object.keys(shell).length;
+                        console.log(length);
+                        for (var i = 0; i < shell.length; i++) {
+                            console.log("Latitude: " + shell[i][0]);
+                            console.log("Longitude: "+ shell[i][1]);
+                            var pt = new google.maps.LatLng(shell[i][0], shell[i][1]);
+                            bounds.extend(pt);
+                            latLngArray.push(pt);
 
+                        }
+
+                        console.log(latLngArray);
+                        // Polygon construction.
+                        var ttPoly = new google.maps.Polygon({
+                            paths: latLngArray,
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 0.2,
+                            strokeWeight: 2,
+                            fillColor: '#FF0000',
+                            fillOpacity: 0.2
+                        });
+                        ttPoly.setMap(map);
+
+                        google.maps.event.addListener(ttPoly, 'click', function(event) {
+                            var contentString = "Nome: " + nomeCais + "<br>Info: " + infoCais;
+                            infowindow.setContent(contentString);
+                            infowindow.setPosition(event.latLng);
+                            infowindow.open(map);
+                        });
                     }
-
-                    console.log(latLngArray);
-                    // Polygon construction.
-                    var ttPoly = new google.maps.Polygon({
-                        paths: latLngArray,
-                        strokeColor: '#FF0000',
-                        strokeOpacity: 0.2,
-                        strokeWeight: 2,
-                        fillColor: '#FF0000',
-                        fillOpacity: 0.2
-                    });
-                    ttPoly.setMap(map);
                 }
                 map.fitBounds(bounds);
 
@@ -241,7 +249,7 @@
 
             const infoWindoGeolocation = new google.maps.InfoWindow()
 
-            const locationButton = document.createElement("button");
+            const locationButton = document.getElementById('button');
 
             locationButton.textContent = "Current location";
             locationButton.classList.add("custom-map-control-button");
@@ -288,6 +296,71 @@
                     : "Error: Your browser doesn't support geolocation."
             );
         }
+
+            //GEo Coding search bar
+            var input = document.getElementById('searchInput');
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+
+            var infowindow1 = new google.maps.InfoWindow();
+            var marker1 = new google.maps.Marker({
+                map: map,
+                anchorPoint: new google.maps.Point(0, -29)
+            });
+
+
+
+            autocomplete.addListener ('place_changed', function() {
+                infowindow1.close();
+                marker1.setVisible(false);
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    window.alert("Autocomplete's returned place contains no geometry");
+                    return;
+                }
+
+                // If the place has a geometry, then present it on a map.
+                if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(17);
+                }
+                marker1.setIcon(({
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(35, 35)
+                }));
+                marker1.setPosition(place.geometry.location);
+                marker1.setVisible(true);
+
+                var address = '';
+                if (place.address_components) {
+                    address = [
+                        (place.address_components[0] && place.address_components[0].short_name || ''),
+                        (place.address_components[1] && place.address_components[1].short_name || ''),
+                        (place.address_components[2] && place.address_components[2].short_name || '')
+                    ].join(' ');
+                }
+
+                infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+                infowindow.open(map, marker1);
+
+                // Location details
+                for (var i = 0; i < place.address_components.length; i++) {
+                    if(place.address_components[i].types[0] == 'postal_code'){
+                        document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
+                    }
+                    if(place.address_components[i].types[0] == 'country'){
+                        document.getElementById('country').innerHTML = place.address_components[i].long_name;
+                    }
+                }
+            });
+
 
             //Add a marker
             //Add a marker
@@ -364,7 +437,7 @@
 
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXJMCul0dV0qlry9bSDTx9K9dKRLJZSY&callback=initMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAeXJMCul0dV0qlry9bSDTx9K9dKRLJZSY&callback=initMap"></script>
 
 
 </body>
