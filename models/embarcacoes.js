@@ -6,9 +6,14 @@ const app = express();
 
 client.connect();
 
+
+
 module.exports.getEmbarcacoes = async function() {
     try {
-        let sql = 'select *, st_X(embarcacao_pos) lat, st_Y(embarcacao_pos)long from embarcacao';
+        let sql = `SELECT embarcacao.*, st_X(embarcacao_pos) lat, st_Y(embarcacao_pos)long, utilizador_name
+                   FROM embarcacao
+                            INNER JOIN utilizador
+                                       ON embarcacao.embarcacao_prop_id = utilizador.utilizador_id`;
         let result = await client.query(sql);
         let embarcacoes = result.rows;
         console.log("[embarcacaoModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
@@ -48,8 +53,8 @@ module.exports.addEmbarcacao = async function(embarcacao) {
             return { status: 400, data: { msg: "Malformed data" } };
     }
     try {
-        let sql = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id,embarcacao_cais_id) 
-    values('${embarcacao.name}', '${embarcacao.info}', '${embarcacao.propId}', '${embarcacao.caisId}')`
+        let sql = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id, embarcacao_pos) 
+    values('${embarcacao.name}', '${embarcacao.info}', '${embarcacao.propId}', ${embarcacao.pos})`
         let result = await client.query(sql);
         let embarcacoes = result.rows[0];
         console.log("[embarcacaoModel.addEmbarcacao] embarcacao = " + JSON.stringify(embarcacoes));
@@ -85,7 +90,7 @@ module.exports.updateEmbarcacao = async function(embarcacao) {
                        set embarcacao_name = '${embarcacao.name}',
                        embarcacao_info= '${embarcacao.info}',
                        embarcacao_prop_id = '${embarcacao.propId}',
-                       embarcacao_cais_id = '${embarcacao.caisId}'
+                       embarcacao_pos = ${embarcacao.pos}
                        where embarcacao_id = ${embarcacao.id}`
         let result = await client.query(updateQuery);
 
