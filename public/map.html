@@ -210,10 +210,10 @@
                         map: map
                     });
 
-                    marker.setIcon('../images/EventoMarker.png')
+                    marker.setIcon('../images/barco-a-vela.png')
                     google.maps.event.addListener(marker, 'click', (function(marker, i) {
                         return function() {
-                            infowindowEmb.setContent("Nome: " + embarcacoes[i].embarcacao_name + "<br>Info: " + embarcacoes[i].embarcacao_info + "<br>Date: "+ locations[i].eventos_date + "<br>Start Time: "+  locations[i].eventos_starttime  + "<br>End Time: "+ locations[i].eventos_endtime );
+                            infowindowEmb.setContent("Nome: " + embarcacoes[i].embarcacao_name + "<br>Info: " + embarcacoes[i].embarcacao_info + "<br>Nome do propietário: "+ embarcacoes[i].utilizador_name );
 
                             infowindowEmb.open(map, marker);
                         }
