@@ -8,7 +8,7 @@ client.connect();
 
 module.exports.getEmbarcacoes = async function() {
     try {
-        let sql = 'select * from embarcacao';
+        let sql = 'select *, st_X(embarcacao_pos) lat, st_Y(embarcacao_pos)long from embarcacao';
         let result = await client.query(sql);
         let embarcacoes = result.rows;
         console.log("[embarcacaoModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));

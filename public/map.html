@@ -185,6 +185,47 @@
             getEventos();
 
 
+
+
+
+
+
+
+
+
+            const infowindowEmb = new google.maps.InfoWindow()
+
+            const api_url3='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/embarcacao'
+            async function getEmbarcacoes(){
+                const response=await fetch(api_url3);
+                const embarcacoes =await response.json();
+
+
+
+                console.log(locations);
+
+                for (i = 0; i < locations.length; i++) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(locations[i].eventos_local.x, locations[i].eventos_local.y),
+                        map: map
+                    });
+
+                    marker.setIcon('../images/EventoMarker.png')
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindowEmb.setContent("Nome: " + locations[i].eventos_name + "<br>Info: " + locations[i].eventos_info + "<br>Date: "+ locations[i].eventos_date + "<br>Start Time: "+  locations[i].eventos_starttime  + "<br>End Time: "+ locations[i].eventos_endtime );
+
+                            infowindowEmb.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+
+
+
+            }
+
+            getEmbarcacoes();
+
             // Add a polygon
 
             const api_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/cais'
