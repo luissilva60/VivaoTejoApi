@@ -53,7 +53,7 @@ router.get('/intersection', async function(req, res, next) {
 router.get('/intersection/number/:id(\\d+)', async function(req, res, next) {
     let id = req.params.id
     console.log("[embarcacoesRoutes] Retrieving all intersections in polygon");
-    let result = await embarcacoesModel.getNumberOfEmbarcacoesInPolygon();
+    let result = await embarcacoesModel.getNumberOfEmbarcacoesInPolygon(id);
     res.status(result.status).send(result.data);
 
 });
