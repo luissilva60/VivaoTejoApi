@@ -275,8 +275,7 @@
                 const response=await fetch(api_url);
                 const cais=await response.json();
 
-                const response2=await fetch(api_url2);
-                const locations=await response2.json();
+
 
                 for (i = 0; i < cais.length; i++) {
                     var ParseCais = JSON.parse(cais[i].geojson)
@@ -284,7 +283,7 @@
                     console.log(cais[i].cais_name)
                     var nomeCais = cais[i].cais_name;
                     var infoCais = cais[i].cais_info;
-                    var color;
+                    var color= '#FF0000';
                     var bounds = new google.maps.LatLngBounds();
                     for (var y = 0; y < cais.length; y++) {
                         var shell = ParseCais.coordinates[y];
@@ -299,14 +298,14 @@
                             latLngArray.push(pt);
 
                         }
-                        if(intersectionpoints < 5){
+                        /*if(intersectionpoints < 5){
                             color = '#008000'
                         }else if(intersectionpoints > 5 && intersectionpoints < 20){
                             color = '#FFFF00'
                         }else{
                             color = '#FF0000'
                         }
-
+*/
                         console.log(latLngArray);
                         // Polygon construction.
                         var ttPoly = new google.maps.Polygon({
@@ -318,12 +317,6 @@
                             fillOpacity: 0.2
                         });
                         ttPoly.setMap(map);
-                        var cont = 0;
-                        for (var x = 0; x < locations.length; x++) {
-                            if (  ttPoly.Contains(new google.maps.LatLng(locations[x].lat, locations[x].long))) {
-                               cont++;
-                            }
-                        }
 
                         google.maps.event.addListener(ttPoly, 'click', function(event) {
                             var contentString = "Nome: " + nomeCais + "<br>Info: " + infoCais + "<br>Nº de barcos: " + cont;

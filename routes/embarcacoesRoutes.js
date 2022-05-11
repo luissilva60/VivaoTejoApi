@@ -41,13 +41,16 @@ router.put('/update', async function(req, res, next) {
 });
 
 router.get('/intersection', async function(req, res, next) {
-    console.log("[embarcacoesRoutes] Retrieving all intersections in polygon");
-    let result = await embarcacoesModel.getEmbarcacoesinPolygon();
+    let id = req.params.id
+    console.log("[embarcacoesRoutes] Retrieving all intersections in polygon in cais with :" + id);
+
+
+    let result = await embarcacoesModel.getEmbarcacoesinPolygon(id);
     res.status(result.status).send(result.data);
 
 });
 
-router.get('/intersection/number', async function(req, res, next) {
+router.get('/intersection/number/:id(\\d+)', async function(req, res, next) {
     console.log("[embarcacoesRoutes] Retrieving all intersections in polygon");
     let result = await embarcacoesModel.getNumberOfEmbarcacoesInPolygon();
     res.status(result.status).send(result.data);
