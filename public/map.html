@@ -249,16 +249,18 @@
                     const getNumberOfEmbarcacoesInPolygon_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/embarcacao/intersection/number/' + JSON.stringify(idCais)
 
 
-
+                    var BoatsInCais = {cais_id: 1, count: 2}
                     fetch(getNumberOfEmbarcacoesInPolygon_url).then(function (response) {
                         response.json().then(function (dataBIC) {
-                            console.log('Response body of inner "anotherUrl": ');
+                            console.log('Response body of inner ' + getNumberOfEmbarcacoesInPolygon_url + ':');
                             console.log(JSON.stringify(dataBIC) + '\n\n');
                         });
                     }).catch(function () {
-                        console.log('Booo');
-                    });
-
+                        console.log('catch');
+                    })
+                    console.log(BoatsInCais)
+                    var bic = BoatsInCais.count;
+                    console.log(bic)
 
                     var color= 0;
                     var bounds = new google.maps.LatLngBounds();
@@ -266,7 +268,7 @@
                         var shell = ParseCais.coordinates[y];
                         var latLngArray = [];
                         var length = Object.keys(shell).length;
-                        var bic = BoatsInCais.count
+
                         console.log(length);
                         for (var i = 0; i < shell.length; i++) {
                             console.log("Latitude: " + shell[i][0]);
@@ -276,7 +278,6 @@
                             latLngArray.push(pt);
 
                         }
-                        console.log(bic)
                         if(bic < 5){
                             color = '#008000'
                         }else if(bic > 5 && bic < 20){
