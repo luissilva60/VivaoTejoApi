@@ -284,7 +284,7 @@
                     console.log(cais[i].cais_name)
                     var nomeCais = cais[i].cais_name;
                     var infoCais = cais[i].cais_info;
-
+                    var color;
                     var bounds = new google.maps.LatLngBounds();
                     for (var y = 0; y < cais.length; y++) {
                         var shell = ParseCais.coordinates[y];
@@ -299,15 +299,22 @@
                             latLngArray.push(pt);
 
                         }
+                        if(intersectionpoints < 5){
+                            color = '#008000'
+                        }else if(intersectionpoints > 5 && intersectionpoints < 20){
+                            color = '#FFFF00'
+                        }else{
+                            color = '#FF0000'
+                        }
 
                         console.log(latLngArray);
                         // Polygon construction.
                         var ttPoly = new google.maps.Polygon({
                             paths: latLngArray,
-                            strokeColor: '#FF0000',
+                            strokeColor: color,
                             strokeOpacity: 0.2,
                             strokeWeight: 2,
-                            fillColor: '#FF0000',
+                            fillColor: color,
                             fillOpacity: 0.2
                         });
                         ttPoly.setMap(map);
