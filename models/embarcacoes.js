@@ -102,3 +102,17 @@ module.exports.updateEmbarcacao = async function(embarcacao) {
         return { status: 500, data: err };
     }
 }
+
+module.exports.getEmbarcacoesinPolygon = async function() {
+    try {
+        let sql = `Select ST_Intersects( cais_spot , embarcacao_pos) from cais, embarcacao`;
+        let result = await client.query(sql);
+        let embarcacoes = result.rows;
+        console.log("[embarcacaoModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
+        return{status: 200, data: embarcacoes}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}

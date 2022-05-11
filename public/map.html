@@ -81,7 +81,7 @@
             margin-left: 12px;
             padding: 0 11px 0 13px;
             text-overflow: ellipsis;
-            width: 400px;
+            width: 500px;
         }
         #pac-input:focus {
             border-color: #4d90fe;
@@ -150,6 +150,46 @@
             //link map options to actual map
             let map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
+            //check if point  is in polygon
+            google.maps.Polygon.prototype.Contains = function (point) {
+                var crossings = 0,
+                    path = this.getPath();
+                // for each edge
+                for (var i = 0; i < path.getLength() ; i++) {
+                    var a = path.getAt(i),
+                        j = i + 1;
+                    if (j >= path.getLength()) {
+                        j = 0;
+                    }
+                    var b = path.getAt(j);
+                    if (rayCrossesSegment(point, a, b)) {
+                        crossings++;
+                    }
+                }
+                // odd number of crossings?
+                return (crossings % 2 == 1);
+                function rayCrossesSegment(point, a, b) {
+                    var px = point.lng(),
+                        py = point.lat(),
+                        ax = a.lng(),
+                        ay = a.lat(),
+                        bx = b.lng(),
+                        by = b.lat();
+                    if (ay > by) {
+                        ax = b.lng();
+                        ay = b.lat();
+                        bx = a.lng();
+                        by = a.lat();
+                    }
+                    if (py == ay || py == by) py += 0.00000001;
+                    if ((py > by || py < ay) || (px > Math.max(ax, bx))) return false;
+                    if (px < Math.min(ax, bx)) return true;
+                    var red = (ax != bx) ? ((by - ay) / (bx - ax)) : Infinity;
+                    var blue = (ax != px) ? ((py - ay) / (px - ax)) : Infinity;
+                    return (blue >= red);
+                }
+            };
+
 
             const infowindow = new google.maps.InfoWindow()
 
@@ -190,7 +230,7 @@
 
 
 
-
+            //Add embarcacoes
 
 
             const infowindowEmb = new google.maps.InfoWindow()
@@ -199,6 +239,8 @@
             async function getEmbarcacoes(){
                 const response=await fetch(api_url3);
                 const embarcacoes =await response.json();
+
+
 
 
 
@@ -233,6 +275,9 @@
                 const response=await fetch(api_url);
                 const cais=await response.json();
 
+                const response2=await fetch(api_url2);
+                const locations=await response2.json();
+
                 for (i = 0; i < cais.length; i++) {
                     var ParseCais = JSON.parse(cais[i].geojson)
                     console.log(ParseCais.coordinates)
@@ -266,9 +311,15 @@
                             fillOpacity: 0.2
                         });
                         ttPoly.setMap(map);
+                        var cont = 0;
+                        for (var x = 0; x < locations.length; x++) {
+                            if (  ttPoly.Contains(new google.maps.LatLng(locations[x].lat, locations[x].long))) {
+                               cont++;
+                            }
+                        }
 
                         google.maps.event.addListener(ttPoly, 'click', function(event) {
-                            var contentString = "Nome: " + nomeCais + "<br>Info: " + infoCais;
+                            var contentString = "Nome: " + nomeCais + "<br>Info: " + infoCais + "<br>Nº de barcos: " + cont;
                             infowindow.setContent(contentString);
                             infowindow.setPosition(event.latLng);
                             infowindow.open(map);
@@ -279,45 +330,6 @@
 
             }
             getCais();
-
-            google.maps.Polygon.prototype.Contains = function (point) {
-                var crossings = 0,
-                    path = this.getPath();
-                // for each edge
-                for (var i = 0; i < path.getLength() ; i++) {
-                    var a = path.getAt(i),
-                        j = i + 1;
-                    if (j >= path.getLength()) {
-                        j = 0;
-                    }
-                    var b = path.getAt(j);
-                    if (rayCrossesSegment(point, a, b)) {
-                        crossings++;
-                    }
-                }
-                // odd number of crossings?
-                return (crossings % 2 == 1);
-                function rayCrossesSegment(point, a, b) {
-                    var px = point.lng(),
-                        py = point.lat(),
-                        ax = a.lng(),
-                        ay = a.lat(),
-                        bx = b.lng(),
-                        by = b.lat();
-                    if (ay > by) {
-                        ax = b.lng();
-                        ay = b.lat();
-                        bx = a.lng();
-                        by = a.lat();
-                    }
-                    if (py == ay || py == by) py += 0.00000001;
-                    if ((py > by || py < ay) || (px > Math.max(ax, bx))) return false;
-                    if (px < Math.min(ax, bx)) return true;
-                    var red = (ax != bx) ? ((by - ay) / (bx - ax)) : Infinity;
-                    var blue = (ax != px) ? ((py - ay) / (px - ax)) : Infinity;
-                    return (blue >= red);
-                }
-            };
 
 
 
@@ -368,14 +380,14 @@
             });
 
 
-        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-            infoWindow.setPosition(pos);
-            infoWindow.setContent(
-                browserHasGeolocation
-                    ? "Error: The Geolocation service failed."
-                    : "Error: Your browser doesn't support geolocation."
-            );
-        }
+            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(
+                    browserHasGeolocation
+                        ? "Error: The Geolocation service failed."
+                        : "Error: Your browser doesn't support geolocation."
+                );
+            }
 
             //GEo Coding search bar
             var input = document.getElementById('searchInput');

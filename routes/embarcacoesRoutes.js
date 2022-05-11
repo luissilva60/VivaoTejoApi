@@ -40,4 +40,11 @@ router.put('/update', async function(req, res, next) {
 
 });
 
+router.get('/intersection', async function(req, res, next) {
+    console.log("[embarcacoesRoutes] Retrieving all intersections in polygon");
+    let result = await embarcacoesModel.getEmbarcacoesinPolygon();
+    res.status(result.status).send(result.data);
+
+});
+
 module.exports = router;

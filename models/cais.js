@@ -8,7 +8,7 @@ client.connect();
 
 module.exports.getCais = async function() {
     try {
-        let sql = 'select cais.*, St_asText(cais_spot) Pontos,ST_AsGeoJSON(cais_spot, 9, 8) geojson  from cais, embarcacao';
+        let sql = 'select cais.*, St_asText(cais_spot) Pontos,ST_AsGeoJSON(cais_spot, 9, 8) geojson  from cais';
         let result = await client.query(sql);
         let cais = result.rows;
         console.log("[caisModel.getCais] cais = " + JSON.stringify(cais));
