@@ -121,7 +121,8 @@ module.exports.getEmbarcacoesinPolygon = async function() {
 module.exports.getNumberOfEmbarcacoesInPolygon = async function(id) {
     try {
         let sql = `Select cais_id, count(*) from cais, embarcacao
-                   where ST_Intersects( cais_spot , embarcacao_pos) = true group by cais_id AND cais_id = ${id}`;
+                   where cais_id = ${id} AND ST_Intersects( cais_spot , embarcacao_pos) = true 
+                   group by cais_id `;
         let result = await client.query(sql, id);
         let embarcacoes = result.rows;
         console.log("[embarcacaoModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
