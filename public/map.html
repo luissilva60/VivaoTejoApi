@@ -150,7 +150,45 @@
             //link map options to actual map
             let map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-
+            //check if point  is in polygon
+            google.maps.Polygon.prototype.Contains = function (point) {
+                var crossings = 0,
+                    path = this.getPath();
+                // for each edge
+                for (var i = 0; i < path.getLength() ; i++) {
+                    var a = path.getAt(i),
+                        j = i + 1;
+                    if (j >= path.getLength()) {
+                        j = 0;
+                    }
+                    var b = path.getAt(j);
+                    if (rayCrossesSegment(point, a, b)) {
+                        crossings++;
+                    }
+                }
+                // odd number of crossings?
+                return (crossings % 2 == 1);
+                function rayCrossesSegment(point, a, b) {
+                    var px = point.lng(),
+                        py = point.lat(),
+                        ax = a.lng(),
+                        ay = a.lat(),
+                        bx = b.lng(),
+                        by = b.lat();
+                    if (ay > by) {
+                        ax = b.lng();
+                        ay = b.lat();
+                        bx = a.lng();
+                        by = a.lat();
+                    }
+                    if (py == ay || py == by) py += 0.00000001;
+                    if ((py > by || py < ay) || (px > Math.max(ax, bx))) return false;
+                    if (px < Math.min(ax, bx)) return true;
+                    var red = (ax != bx) ? ((by - ay) / (bx - ax)) : Infinity;
+                    var blue = (ax != px) ? ((py - ay) / (px - ax)) : Infinity;
+                    return (blue >= red);
+                }
+            };
 
 
             const infowindow = new google.maps.InfoWindow()
@@ -245,30 +283,12 @@
                     console.log(cais[i].cais_name)
                     var nomeCais = cais[i].cais_name;
                     var infoCais = cais[i].cais_info;
-                    var idCais = cais[i].cais_id;
-                    const getNumberOfEmbarcacoesInPolygon_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/embarcacao/intersection/number/' + JSON.stringify(idCais)
-
-
-                    var BoatsInCais = {cais_id: 1, count: 2}
-                    fetch(getNumberOfEmbarcacoesInPolygon_url).then(function (response) {
-                        response.json().then(function (dataBIC) {
-                            console.log('Response body of inner ' + getNumberOfEmbarcacoesInPolygon_url + ':');
-                            console.log(JSON.stringify(dataBIC) + '\n\n');
-                        });
-                    }).catch(function () {
-                        console.log('catch');
-                    })
-                    console.log(BoatsInCais)
-                    var bic = BoatsInCais.count;
-                    console.log(bic)
-
-                    var color= 0;
+                    var color= '#FF0000';
                     var bounds = new google.maps.LatLngBounds();
                     for (var y = 0; y < cais.length; y++) {
                         var shell = ParseCais.coordinates[y];
                         var latLngArray = [];
                         var length = Object.keys(shell).length;
-
                         console.log(length);
                         for (var i = 0; i < shell.length; i++) {
                             console.log("Latitude: " + shell[i][0]);
@@ -278,14 +298,14 @@
                             latLngArray.push(pt);
 
                         }
-                        if(bic < 5){
+                        /*if(intersectionpoints < 5){
                             color = '#008000'
-                        }else if(bic > 5 && bic < 20){
+                        }else if(intersectionpoints > 5 && intersectionpoints < 20){
                             color = '#FFFF00'
                         }else{
                             color = '#FF0000'
                         }
-
+*/
                         console.log(latLngArray);
                         // Polygon construction.
                         var ttPoly = new google.maps.Polygon({
@@ -299,7 +319,7 @@
                         ttPoly.setMap(map);
 
                         google.maps.event.addListener(ttPoly, 'click', function(event) {
-                            var contentString = "Nome: " + nomeCais + "<br>Info: " + infoCais + "<br>Nº de barcos: " + BoatsInCais.count;
+                            var contentString = "Nome: " + nomeCais + "<br>Info: " + infoCais + "<br>Nº de barcos: " + cont;
                             infowindow.setContent(contentString);
                             infowindow.setPosition(event.latLng);
                             infowindow.open(map);
@@ -383,43 +403,44 @@
             });
 
 
-        const addListener = autocomplete.addListener('place_changed', function () {
-            infowindow1.close();
-            marker1.setVisible(false);
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-                window.alert("Autocomplete's returned place contains no geometry");
-                return;
-            }
 
-            // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-                map.fitBounds(place.geometry.viewport);
-            } else {
-                map.setCenter(place.geometry.location);
-                map.setZoom(17);
-            }
-            marker1.setIcon(({
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(35, 35)
-            }));
-            marker1.setPosition(place.geometry.location);
-            marker1.setVisible(true);
+            autocomplete.addListener ('place_changed', function() {
+                infowindow1.close();
+                marker1.setVisible(false);
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    window.alert("Autocomplete's returned place contains no geometry");
+                    return;
+                }
 
-            var address = '';
-            if (place.address_components) {
-                address = [
-                    (place.address_components[0] && place.address_components[0].short_name || ''),
-                    (place.address_components[1] && place.address_components[1].short_name || ''),
-                    (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(' ');
-            }
+                // If the place has a geometry, then present it on a map.
+                if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(17);
+                }
+                marker1.setIcon(({
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(35, 35)
+                }));
+                marker1.setPosition(place.geometry.location);
+                marker1.setVisible(true);
 
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open(map, marker1);
+                var address = '';
+                if (place.address_components) {
+                    address = [
+                        (place.address_components[0] && place.address_components[0].short_name || ''),
+                        (place.address_components[1] && place.address_components[1].short_name || ''),
+                        (place.address_components[2] && place.address_components[2].short_name || '')
+                    ].join(' ');
+                }
+
+                infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+                infowindow.open(map, marker1);
 
                 // Location details
                 for (var i = 0; i < place.address_components.length; i++) {
@@ -433,7 +454,7 @@
             });
 
 
-        //Add a marker
+            //Add a marker
             //Add a marker
             //Add a marker
             //Add a marker
