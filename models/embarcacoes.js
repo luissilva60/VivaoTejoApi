@@ -117,3 +117,19 @@ module.exports.getEmbarcacoesinPolygon = async function() {
     }
 
 }
+
+module.exports.getNumberOfEmbarcacoesInPolygon = async function() {
+    try {
+        let sql = `Select cais_id, count(*) from cais, embarcacao
+                   where ST_Intersects( cais_spot , embarcacao_pos) = true group by cais_id`;
+        let result = await client.query(sql);
+        let embarcacoes = result.rows;
+        console.log("[embarcacaoModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
+        return{status: 200, data: embarcacoes}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
