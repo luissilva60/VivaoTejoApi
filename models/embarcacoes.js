@@ -105,7 +105,7 @@ module.exports.updateEmbarcacao = async function(embarcacao) {
 
 module.exports.getEmbarcacoesinPolygon = async function() {
     try {
-        let sql = `Select st_asText(ST_Intersects( cais_spot , embarcacao_pos)) from cais, embarcacao`;
+        let sql = `Select *, ST_Intersects( cais_spot , embarcacao_pos)Intersections from cais, embarcacao`;
         let result = await client.query(sql);
         let embarcacoes = result.rows;
         console.log("[embarcacaoModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
