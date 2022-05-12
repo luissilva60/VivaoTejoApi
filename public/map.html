@@ -239,6 +239,7 @@
 
 
 
+
                 for (i = 0; i < cais.length; i++) {
                     var ParseCais = JSON.parse(cais[i].geojson)
                     console.log(ParseCais.coordinates)
@@ -246,27 +247,48 @@
                     var nomeCais = cais[i].cais_name;
                     var infoCais = cais[i].cais_info;
                     var idCais = cais[i].cais_id;
-                    const getNumberOfEmbarcacoesInPolygon_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/embarcacao/intersection/number/' + JSON.stringify(idCais)
+
+
+                    const getNumberOfEmbarcacoesInPolygon_url = 'https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/embarcacao/intersection/number/' + JSON.stringify(idCais)
+                    let data
+                    !await async function () {
+                        data = await fetch(getNumberOfEmbarcacoesInPolygon_url)
+                            .then(response => response.json())
+                            .catch(err => {
+                                console.error('Request failed', err)
+                            })
+                            .then(data => {
+                                return data.count;
+                                //console.log(data);
+                            });
+                        console.log(data)
+                    }();
 
 
 
-                    fetch(getNumberOfEmbarcacoesInPolygon_url).then(function (response) {
-                        response.json().then(function (dataBIC) {
-                            console.log('Response body of inner "anotherUrl": ');
-                            console.log(JSON.stringify(dataBIC) + '\n\n');
-                        });
-                    }).catch(function () {
-                        console.log('Booo');
-                    });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    var bic = data;
                     var color= 0;
                     var bounds = new google.maps.LatLngBounds();
                     for (var y = 0; y < cais.length; y++) {
                         var shell = ParseCais.coordinates[y];
                         var latLngArray = [];
                         var length = Object.keys(shell).length;
-                        var bic = BoatsInCais.count
+
                         console.log(length);
                         for (var i = 0; i < shell.length; i++) {
                             console.log("Latitude: " + shell[i][0]);
@@ -276,10 +298,10 @@
                             latLngArray.push(pt);
 
                         }
-                        console.log(bic)
-                        if(bic < 5){
+
+                        if(bic <= 5){
                             color = '#008000'
-                        }else if(bic > 5 && bic < 20){
+                        }else if(bic > 5 && bic <= 20){
                             color = '#FFFF00'
                         }else{
                             color = '#FF0000'
@@ -298,7 +320,7 @@
                         ttPoly.setMap(map);
 
                         google.maps.event.addListener(ttPoly, 'click', function(event) {
-                            var contentString = "Nome: " + nomeCais + "<br>Info: " + infoCais + "<br>Nº de barcos: " + BoatsInCais.count;
+                            var contentString = "Nome: " + nomeCais + "<br>Info: " + infoCais + "<br>Nº de barcos: " + bic;
                             infowindow.setContent(contentString);
                             infowindow.setPosition(event.latLng);
                             infowindow.open(map);
