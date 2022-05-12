@@ -105,8 +105,8 @@ module.exports.updateEmbarcacao = async function(embarcacao) {
 
 module.exports.getEmbarcacoesinPolygon = async function() {
     try {
-        let sql = `Select cais.cais_id, cais.cais_name, embarcacao.embarcacao_id, embarcacao.embarcacao_name, count(cais_id), ST_Intersects( cais_spot , embarcacao_pos)Intersections 
-                from cais, embarcacao where ST_Intersects( cais_spot , embarcacao_pos) = true`;
+        let sql = `Select cais.cais_id, cais.cais_name, embarcacao.embarcacao_id, embarcacao.embarcacao_name,  ST_Intersects( cais_spot , embarcacao_pos)Intersections
+                   from cais, embarcacao`;
         let result = await client.query(sql);
         let embarcacoes = result.rows;
         console.log("[embarcacaoModel.getEmbarcacoesinPolygon] embarcacoes = " + JSON.stringify(embarcacoes));
