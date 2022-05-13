@@ -127,7 +127,14 @@ module.exports.getNumberOfEmbarcacoesInPolygon = async function(id) {
         let result = await client.query(sql);
         let embarcacoes = result.rows;
         console.log("[embarcacaoModel.getNumberOfEmbarcacoesInPolygon] embarcacoes = " + JSON.stringify(embarcacoes[0]));
-        return{status: 200, data: embarcacoes[0]}
+        if (embarcacoes == 0){
+            return {status:200, data:{
+                cais_id: id, count: 0
+                }}
+        }else {
+            return{status: 200, data: embarcacoes[0]}
+        }
+
     }catch (err) {
         console.log(err);
         return { status: 500, data: err };

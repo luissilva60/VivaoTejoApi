@@ -236,11 +236,12 @@
             async function getCais(){
                 const response=await fetch(api_url);
                 const cais=await response.json();
+                console.log(cais)
 
 
 
 
-                for (i = 0; i < cais.length; i++) {
+                for (let i = 0; i < cais.length; i++) {
                     var ParseCais = JSON.parse(cais[i].geojson)
                     console.log(ParseCais.coordinates)
                     console.log(cais[i].cais_name)
@@ -264,36 +265,20 @@
                         console.log(data)
                     }();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    var slength;
                     var bic = data;
-                    var color= 0;
+                    var color;
                     var bounds = new google.maps.LatLngBounds();
-                    for (var y = 0; y < cais.length; y++) {
+                    for (let y = 0; y < cais.length; y++) {
                         var shell = ParseCais.coordinates[y];
                         var latLngArray = [];
-                        var length = Object.keys(shell).length;
+                        slength = shell.length
 
-                        console.log(length);
-                        for (var i = 0; i < shell.length; i++) {
-                            console.log("Latitude: " + shell[i][0]);
-                            console.log("Longitude: "+ shell[i][1]);
-                            var pt = new google.maps.LatLng(shell[i][0], shell[i][1]);
+                        console.log("dd" + slength);
+                        for (let s = 0; s < slength; s++) {
+                            console.log("Latitude: " + shell[s][0]);
+                            console.log("Longitude: "+ shell[s][1]);
+                            var pt = new google.maps.LatLng(shell[s][0], shell[s][1]);
                             bounds.extend(pt);
                             latLngArray.push(pt);
 
@@ -326,8 +311,9 @@
                             infowindow.open(map);
                         });
                     }
+                    map.fitBounds(bounds);
                 }
-                map.fitBounds(bounds);
+
 
             }
             getCais();
