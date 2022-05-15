@@ -112,6 +112,11 @@
 
         <h2 id="info2"></h2>
         <h3 id="info"></h3>
+        <button id="heatmap" onclick="activateHeatmap();">Heatmap</button>
+        <button id="eventos" onclick="showMarkersEventos();">Eventos</button>
+        <button id="embarcacoes" onclick="showMarkerEmb();">Embarcações</button>
+
+
 
         <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
         <button id="button" class="button" role="button">Current Location</button>
@@ -124,9 +129,12 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
 
+        var heatmap;
+        var map;
+        var markerEmb = [];
+        var markerEventos = [];
 
-
-
+        var markerCluster;
 
 
 
@@ -148,175 +156,34 @@
 
             }
             //link map options to actual map
-            let map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-
-
-
-            const infowindow = new google.maps.InfoWindow()
-
-            const api_url2='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/eventos'
-            async function getEventos(){
-                const response=await fetch(api_url2);
-                const locations=await response.json();
-
-
-
-                console.log(locations);
-
-                for (i = 0; i < locations.length; i++) {
-                    marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(locations[i].eventos_local.x, locations[i].eventos_local.y),
-                        map: map
-                    });
-
-                    marker.setIcon('../images/EventoMarker.png')
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                        return function() {
-                            infowindow.setContent("Nome: " + locations[i].eventos_name + "<br>Info: " + locations[i].eventos_info + "<br>Date: "+ locations[i].eventos_date + "<br>Start Time: "+  locations[i].eventos_starttime  + "<br>End Time: "+ locations[i].eventos_endtime );
-
-                            infowindow.open(map, marker);
-                        }
-                    })(marker, i));
-                }
-
-
-
-            }
+            map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
             getEventos();
 
-
-
-
-
-
-
-            //Add embarcacoes
-
-
-            const infowindowEmb = new google.maps.InfoWindow()
-
-            const api_url3='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/embarcacao'
-            async function getEmbarcacoes(){
-                const response=await fetch(api_url3);
-                const embarcacoes =await response.json();
-
-
-
-
-
-                console.log(embarcacoes);
-
-                for (i = 0; i < embarcacoes.length; i++) {
-                    marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(embarcacoes[i].lat, embarcacoes[i].long),
-                        map: map
-                    });
-
-                    marker.setIcon('../images/barco-a-vela.png')
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                        return function() {
-                            infowindowEmb.setContent("Nome: " + embarcacoes[i].embarcacao_name + "<br>Info: " + embarcacoes[i].embarcacao_info + "<br>Nome do propietário: "+ embarcacoes[i].utilizador_name );
-
-                            infowindowEmb.open(map, marker);
-                        }
-                    })(marker, i));
-                }
-
-
-
-            }
-
             getEmbarcacoes();
 
-            // Add a polygon
-
-            const api_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/cais'
-            async function getCais(){
-                const response=await fetch(api_url);
-                const cais=await response.json();
-                console.log(cais)
-
-
-
-
-                for (let i = 0; i < cais.length; i++) {
-                    var ParseCais = JSON.parse(cais[i].geojson)
-                    console.log(ParseCais.coordinates)
-                    console.log(cais[i].cais_name)
-                    var nomeCais = cais[i].cais_name;
-                    var infoCais = cais[i].cais_info;
-                    var idCais = cais[i].cais_id;
-
-
-                    const getNumberOfEmbarcacoesInPolygon_url = 'https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/embarcacao/intersection/number/' + JSON.stringify(idCais)
-                    let data
-                    !await async function () {
-                        data = await fetch(getNumberOfEmbarcacoesInPolygon_url)
-                            .then(response => response.json())
-                            .catch(err => {
-                                console.error('Request failed', err)
-                            })
-                            .then(data => {
-                                return data.count;
-                                console.log(data);
-                            });
-                        console.log(data)
-                    }();
-
-                    var slength;
-                    var bic = data;
-                    var color;
-                    var bounds = new google.maps.LatLngBounds();
-                    for (let y = 0; y < cais.length; y++) {
-                        var shell = ParseCais.coordinates[y];
-                        var latLngArray = [];
-                        slength = shell.length
-
-                        console.log("dd" + slength);
-                        for (let s = 0; s < slength; s++) {
-                            console.log("Latitude: " + shell[s][0]);
-                            console.log("Longitude: "+ shell[s][1]);
-                            var pt = new google.maps.LatLng(shell[s][0], shell[s][1]);
-                            bounds.extend(pt);
-                            latLngArray.push(pt);
-
-                        }
-
-                        if(bic <= 5){
-                            color = '#008000'
-                        }else if(bic > 5 && bic <= 20){
-                            color = '#FFFF00'
-                        }else{
-                            color = '#FF0000'
-                        }
-
-                        console.log(latLngArray);
-                        // Polygon construction.
-                        var ttPoly = new google.maps.Polygon({
-                            paths: latLngArray,
-                            strokeColor: color,
-                            strokeOpacity: 0.2,
-                            strokeWeight: 2,
-                            fillColor: color,
-                            fillOpacity: 0.2
-                        });
-                        ttPoly.setMap(map);
-
-                        google.maps.event.addListener(ttPoly, 'click', function(event) {
-                            var contentString = "Nome: " + nomeCais + "<br>Info: " + infoCais + "<br>Nº de barcos: " + bic;
-                            infowindow.setContent(contentString);
-                            infowindow.setPosition(event.latLng);
-                            infowindow.open(map);
-                        });
-                    }
-                    map.fitBounds(bounds);
-                }
-
-
-            }
             getCais();
+
+            heatmap = new google.maps.visualization.HeatmapLayer();
+
+            markerCluster = new MarkerClusterer(map, markers,
+                {
+                    imagePath:
+                        'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -384,7 +251,7 @@
             autocomplete.bindTo('bounds', map);
 
             var infowindow1 = new google.maps.InfoWindow();
-            var marker1 = new google.maps.Marker({
+            var geocodingMarker = new google.maps.Marker({
                 map: map,
                 anchorPoint: new google.maps.Point(0, -29)
             });
@@ -392,7 +259,7 @@
 
         const addListener = autocomplete.addListener('place_changed', function () {
             infowindow1.close();
-            marker1.setVisible(false);
+            geocodingMarker.setVisible(false);
             var place = autocomplete.getPlace();
             if (!place.geometry) {
                 window.alert("Autocomplete's returned place contains no geometry");
@@ -406,15 +273,15 @@
                 map.setCenter(place.geometry.location);
                 map.setZoom(17);
             }
-            marker1.setIcon(({
+            geocodingMarker.setIcon(({
                 url: place.icon,
                 size: new google.maps.Size(71, 71),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(17, 34),
                 scaledSize: new google.maps.Size(35, 35)
             }));
-            marker1.setPosition(place.geometry.location);
-            marker1.setVisible(true);
+            geocodingMarker.setPosition(place.geometry.location);
+            geocodingMarker.setVisible(true);
 
             var address = '';
             if (place.address_components) {
@@ -426,7 +293,7 @@
             }
 
             infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open(map, marker1);
+            infowindow.open(map, geocodingMarker);
 
                 // Location details
                 for (var i = 0; i < place.address_components.length; i++) {
@@ -440,82 +307,205 @@
             });
 
 
-        //Add a marker
-            //Add a marker
-            //Add a marker
-            //Add a marker
+
+        }
+
+        const api_url='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/cais'
+        async function getCais(){
+            const response=await fetch(api_url);
+            const cais=await response.json();
+            console.log(cais)
+            var data
+            var infowindowCais= new google.maps.InfoWindow()
+            var ttPoly = [];
+            var color = [];
+            var bounds = [];
+            var latLngArray = [];
+            var bic = [];
+            for (let i = 0; i < cais.length; i++) {
+                var ParseCais = JSON.parse(cais[i].geojson)
+                console.log(ParseCais.coordinates)
+                console.log(cais[i].cais_name)
 
 
-            /*let markerOptions = {
-                position: new google.maps.LatLng(38.654205708390336, -8.994321577976788),
-                title: 'Evento Marinha do Tejo',
-                optimized: true,
-                animation: google.maps.Animation.BOUNCE,
-                content:'<h1>asdasdasdasdasdasasd</h1>'
+                var getNumberOfEmbarcacoesInPolygon_url = 'https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/embarcacao/intersection/number/' + JSON.stringify(cais[i].cais_id)
+
+                !await async function () {
+                    data = await fetch(getNumberOfEmbarcacoesInPolygon_url)
+                        .then(response => response.json())
+                        .catch(err => {
+                            console.error('Request failed', err)
+                        })
+                        .then(data => {
+                            return data.count;
+                            console.log(data);
+                        });
+                    console.log("ss ",data)
+                }();
+
+
+                bic[i] = data;
+                console.log("bic ",bic[i])
+
+                bounds[i] = new google.maps.LatLngBounds();
+
+                var shell = ParseCais.coordinates[0];
+
+                latLngArray[i] = [];
+
+
+                for (let s = 0; s < shell.length; s++) {
+                    console.log("Latitude: " + shell[s][0]);
+                    console.log("Longitude: "+ shell[s][1]);
+                    var pt = new google.maps.LatLng(shell[s][0], shell[s][1]);
+                    bounds[i].extend(pt);
+                    latLngArray[i].push(pt);
+
+                }
+
+                if(bic[i] <= 5){
+                    color[i] = '#008000'
+                }else if(bic[i] > 5 && bic[i] <= 20){
+                    color[i] = '#FFFF00'
+                }else{
+                    color[i] = '#FF0000'
+                }
+
+                console.log(latLngArray);
+                // Polygon construction.
+
+                ttPoly[i] = new google.maps.Polygon({
+                    paths: latLngArray[i],
+                    strokeColor: color[i],
+                    strokeOpacity: 0.2,
+                    strokeWeight: 2,
+                    fillColor: color[i],
+                    fillOpacity: 0.2
+                });
+                ttPoly[i].setMap(map);
+
+                google.maps.event.addListener(ttPoly[i], 'click', function(event) {
+                    var contentString = "<h2>" + cais[i].cais_name + "</h2>    <p> " + cais[i].cais_info + "</p><p><b> Nº de barcos: </b>" + bic[i]+ "";
+                    console.log(contentString)
+                    infowindowCais.setContent(contentString);
+                    infowindowCais.setPosition(event.latLng);
+                    infowindowCais.open(map);
+                    map.fitBounds(bounds[i]);
+                });
 
 
             }
 
 
-            let marker1 = new google.maps.Marker(markerOptions)
+        }
 
-            marker1.setIcon('../images/EventoMarker.png')
-            //marker1.setLabel('Evento Marinha do Tejo')
+        const api_url3='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/embarcacao'
+        async function getEmbarcacoes(){
+            const response=await fetch(api_url3);
+            const embarcacoes =await response.json();
 
-            //Info Window Options
+            var infowindowEmb = new google.maps.InfoWindow()
 
-            const infoWindowOptions= {
-                content: 'Evento da Marinha do Tejo',
-                position: {lat: 38.654205708390336, lng: -8.994321577976788 }
+
+
+            console.log(embarcacoes);
+
+            for (i = 0; i < embarcacoes.length; i++) {
+                markerEmb[i] = new google.maps.Marker({
+                    position: new google.maps.LatLng(embarcacoes[i].lat, embarcacoes[i].long),
+                    map: map
+                });
+
+                markerEmb[i].setIcon('../images/barco-a-vela.png')
+                google.maps.event.addListener(markerEmb[i], 'click', (function(marker, i){
+                    return function() {
+                        infowindowEmb.setContent("<h2>" + embarcacoes[i].embarcacao_name + "</h2><p> " + embarcacoes[i].embarcacao_info + "</p> Propietário: "+ embarcacoes[i].utilizador_name );
+
+                        infowindowEmb.open(map, marker);
+                    }
+                })(markerEmb[i], i));
             }
-            const infoWindow = new google.maps.InfoWindow(infoWindowOptions)
 
-            const infoWindowOpenOptions = {
-                map: map,
-                anchor: marker1,
-                shouldFocus: false,
-                maxWidth: 200
+            new MarkerClusterer({ markerEmb, map });
+
+
+
+        }
+
+        const api_url2='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/eventos'
+        async function getEventos(){
+            const response=await fetch(api_url2);
+            const locations=await response.json();
+
+
+            var infoWindowEventos = new google.maps.InfoWindow()
+            console.log(locations);
+
+            for (i = 0; i < locations.length; i++) {
+                markerEventos[i] = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i].eventos_local.x, locations[i].eventos_local.y),
+                    map: map
+                });
+
+                markerEventos[i].setIcon('../images/EventoMarker.png')
+                google.maps.event.addListener(markerEventos[i], 'click', (function(marker, i) {
+                    return function() {
+                        infoWindowEventos.setContent("Nome: " + locations[i].eventos_name + "<br>Info: " + locations[i].eventos_info + "<br>Date: "+ locations[i].eventos_date + "<br>Start Time: "+  locations[i].eventos_starttime  + "<br>End Time: "+ locations[i].eventos_endtime );
+
+                        infoWindowEventos.open(map, marker);
+                    }
+                })(markerEventos[i], i));
             }
-            infoWindow.open(infoWindowOpenOptions);
-
-            infoWindow.setPosition({lat: 38.654205708390336, lng: -8.994321577976788 })
-
+            var markerCluster = new MarkerClusterer({ markerEventos, map });
+            markerCluster.setMap(map)
 
 
-
-
-
-            marker1.addListener('click', (googleMapsEvent)=>{
-                document.getElementById('info').innerHTML = 'latitude:' + googleMapsEvent.latLng.lat()  + ' longitude:' + googleMapsEvent.latLng.lng()
-            }, 5000)
-
-            marker1.setMap(map);
-            document.getElementById('info2').innerHTML = marker1.getAnimation();
-
-            setTimeout(()=>{
-                marker1.setAnimation(null);
-                document.getElementById('info2').innerHTML = marker1.getAnimation();
-            }, 5000)
-*/
-
-
-            /*map.setTilt(45);*/
-
-            /*delete marker after 3 seconds
-
-            setTimeout(()=> {
-                marker.setMap(null);
-            }, 3000);*/
-
-
-
-
-            //document.getElementById('info').innerHTML = "MAPA Teste";
         }
 
 
+        function clearMarkers() {
+            for(i in markerEventos){
+                markerEventos[i].setMap(null)
+            }
+            for(i in markerEmb){
+                markerEmb[i].setMap(null);
+            }
+            heatmap.setMap(null);
+        }
+        function showMarkerEmb() {
+            clearMarkers()
+            for(i in markerEmb){
+                markerEmb[i].setMap(map);
+            }
+        }
+        function showMarkersEventos() {
+            clearMarkers()
+            for(i in markerEventos){
+                markerEventos[i].setMap(map);
+            }
+        }
+
+        function activateHeatmap() {
+            clearMarkers();
+
+            var _points = [];
+            for (i in markerEmb) {
+                var pos = markerEmb[i].getPosition();
+                var position = new google.maps.LatLng(pos.lat() , pos.lng());
+                _points.push(position);
+            }
+            console.log(markerEmb.latLng)
+            console.log(_points)
+
+
+            heatmap.setData(_points);
+            heatmap.setMap(map);
+        }
+
+
+
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAeXJMCul0dV0qlry9bSDTx9K9dKRLJZSY&callback=initMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAeXJMCul0dV0qlry9bSDTx9K9dKRLJZSY&libraries=visualization&callback=initMap"></script>
 
 
 </body>
