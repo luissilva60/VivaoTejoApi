@@ -7,7 +7,8 @@ const app = express();
 client.connect();
 module.exports.getUsers = async function() {
     try {
-        let sql = 'select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate from utilizador';
+        let sql = `select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate, roles_name from utilizador
+                            INNER JOIN roles r on utilizador.utilizador_role_id = r.roles_id`;
         let result = await client.query(sql);
         let users = result.rows;
         console.log("[userModel.getUsers] Users = " + JSON.stringify(users));
