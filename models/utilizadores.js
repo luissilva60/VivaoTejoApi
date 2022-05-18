@@ -7,7 +7,7 @@ const app = express();
 client.connect();
 module.exports.getUsers = async function() {
     try {
-        let sql = 'select * from utilizador';
+        let sql = 'select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate from utilizador';
         let result = await client.query(sql);
         let users = result.rows;
         console.log("[userModel.getUsers] Users = " + JSON.stringify(users));
@@ -22,7 +22,7 @@ module.exports.getUsers = async function() {
 module.exports.getUser = async function(id) {
     console.log("[userModel.getUser] id = " + JSON.stringify(id));
     try {
-        let sql = 'select * from utilizador WHERE utilizador_id = $1';
+        let sql = 'select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate from utilizador WHERE utilizador_id = $1';
         let result = await client.query(sql, [id]);
         let user = result.rows;
         if (user.length > 0) {
@@ -99,7 +99,7 @@ module.exports.updateUser = async function(user) {
 module.exports.getUserLogin = async function(email, password) {
     console.log("[userModel.getUser] Login = Email: " + JSON.stringify(email)+ " Password: "+ + JSON.stringify(password));
     try {
-        let sql = `select * from utilizador WHERE utilizador_email = '${email}' AND utilizador_password = '${password}'`;
+        let sql = `select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate from utilizador WHERE utilizador_email = '${email}' AND utilizador_password = '${password}'`;
         let result = await client.query(sql);
         let user = result.rows;
         if (user.length > 0) {
