@@ -47,7 +47,7 @@
              font-size: 13px;
              font-weight: 400;
              line-height: 1.15385;
-             margin: 0;
+             margin-top: 12px;
              outline: none;
              padding: 8px .8em;
              position: relative;
@@ -73,7 +73,179 @@
             background-color: #0064bd;
             box-shadow: none;
         }
-        #pac-input {
+
+        #filters{
+            margin-right: 12px;
+            margin-bottom: 20px;
+        }
+
+
+        #heatmap{
+            background-color: #0095ff;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.15385;
+            margin: 0;
+            outline: none;
+            padding: 8px .8em;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: baseline;
+            white-space: nowrap;
+        }
+
+        #heatmap:hover,
+        #heatmap:focus {
+            background-color: #07c;
+        }
+
+        #heatmap:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+        }
+
+        #heatmap:active {
+            background-color: #0064bd;
+            box-shadow: none;
+        }
+
+
+
+
+        #eventos{
+            background-color: #0095ff;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.15385;
+            margin: 0;
+            outline: none;
+            padding: 8px .8em;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: baseline;
+            white-space: nowrap;
+        }
+
+        #eventos:hover,
+        #eventos:focus {
+            background-color: #07c;
+        }
+
+        #eventos:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+        }
+
+        #eventos:active {
+            background-color: #0064bd;
+            box-shadow: none;
+        }
+
+
+
+        #embarcacoes{
+            background-color: #0095ff;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.15385;
+            margin: 0;
+            outline: none;
+            padding: 8px .8em;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: baseline;
+            white-space: nowrap;
+        }
+
+        #embarcacoes:hover,
+        #embarcacoes:focus {
+            background-color: #07c;
+        }
+
+        #embarcacoes:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+        }
+
+        #embarcacoes:active {
+            background-color: #0064bd;
+            box-shadow: none;
+        }
+
+
+        #todos{
+            background-color: #0095ff;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.15385;
+            margin: 0;
+            outline: none;
+            padding: 8px .8em;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: baseline;
+            white-space: nowrap;
+        }
+
+        #todos:hover,
+        #todos:focus {
+            background-color: #07c;
+        }
+
+        #todos:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+        }
+
+        #todos:active {
+            background-color: #0064bd;
+            box-shadow: none;
+        }
+        #searchInput {
             background-color: #fff;
             font-family: Roboto;
             font-size: 15px;
@@ -83,7 +255,7 @@
             text-overflow: ellipsis;
             width: 500px;
         }
-        #pac-input:focus {
+        #searchInput:focus {
             border-color: #4d90fe;
         }
         .pac-container {
@@ -112,12 +284,14 @@
 
         <h2 id="info2"></h2>
         <h3 id="info"></h3>
-        <button id="heatmap" onclick="activateHeatmap();">Heatmap</button>
-        <button id="eventos" onclick="showMarkersEventos();">Eventos</button>
-        <button id="embarcacoes" onclick="showMarkerEmb();">Embarcações</button>
 
+        <div id="filters" class="btn-group">
 
-
+            <button id="todos" onclick="showAllMarkers();" class="btn btn-primary">Todos</button>
+            <button id="eventos" onclick="showMarkersEventos();" class="btn btn-primary">Eventos</button>
+            <button id="embarcacoes" onclick="showMarkerEmb();" class="btn btn-primary">Embarcações</button>
+            <button id="heatmap" onclick="activateHeatmap();" class="btn btn-primary">HeatMap de Embarcações</button>
+        </div>
         <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
         <button id="button" class="button" role="button">Current Location</button>
         <div id="map"></div>
@@ -134,7 +308,8 @@
         var markerEmb = [];
         var markerEventos = [];
 
-        var markerCluster;
+        var markerClusterEventos;
+        var markerClusterEmb
 
 
 
@@ -157,20 +332,67 @@
             }
             //link map options to actual map
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            heatmap = new google.maps.visualization.HeatmapLayer
 
+            var clusterStyles = [
+                {
+                    textColor: 'white',
+                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m1.png',
+                    height: 53,
+                    width: 52
+                },
+                {
+                    textColor: 'white',
+                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m2.png',
+                    height: 56,
+                    width: 55
+                },
+                {
+                    textColor: 'white',
+                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m3.png',
+                    height: 66,
+                    width: 65
+                },
+                {
+                    textColor: 'white',
+                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m4.png',
+                    height: 78,
+                    width: 77
+                },
+                {
+                    textColor: 'white',
+                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m5.png',
+                    height: 90,
+                    width: 89
+                }
+            ];
+
+            const clusterEventosOptions = {
+                styles: clusterStyles,
+
+                zoomOnClick: true,
+                maxZoom: 16,
+            };
+
+            const clusterEmbOptions = {
+                imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+
+                zoomOnClick: true,
+                maxZoom: 16,
+            };
+
+
+
+            markerClusterEmb = new MarkerClusterer(map, [], clusterEmbOptions);
+            markerClusterEventos = new MarkerClusterer(map, [], clusterEventosOptions);
             getEventos();
+
+
 
             getEmbarcacoes();
 
             getCais();
 
-            heatmap = new google.maps.visualization.HeatmapLayer();
-
-            markerCluster = new MarkerClusterer(map, markers,
-                {
-                    imagePath:
-                        'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
-                });
 
 
 
@@ -188,6 +410,9 @@
 
 
 
+
+            const filtersButtons = document.getElementById('filters');
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(filtersButtons);
             //Geolocation
             //Geolocation
             //Geolocation
@@ -196,10 +421,10 @@
             const infoWindoGeolocation = new google.maps.InfoWindow()
 
             const locationButton = document.getElementById('button');
-
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
             locationButton.textContent = "Current location";
             locationButton.classList.add("custom-map-control-button");
-            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
             locationButton.addEventListener("click", () => {
                 // Try HTML5 geolocation.
                 if (navigator.geolocation) {
@@ -217,8 +442,8 @@
                             markerGeolocation.setIcon('../images/location.png')
                             google.maps.event.addListener(markerGeolocation, 'click', (function(marker) {
                                 return function() {
-                                    infowindow.setContent("Você está aqui");
-                                    infowindow.open(map, marker);
+                                    infoWindoGeolocation.setContent("Você está aqui");
+                                    infoWindoGeolocation.open(map, marker);
                                 }
                             })(markerGeolocation));
                             map.setCenter(pos);
@@ -419,14 +644,13 @@
                 markerEmb[i].setIcon('../images/barco-a-vela.png')
                 google.maps.event.addListener(markerEmb[i], 'click', (function(marker, i){
                     return function() {
-                        infowindowEmb.setContent("<h2>" + embarcacoes[i].embarcacao_name + "</h2><p> " + embarcacoes[i].embarcacao_info + "</p> Propietário: "+ embarcacoes[i].utilizador_name );
+                        infowindowEmb.setContent("<h2>" + embarcacoes[i].embarcacao_name + "</h2><p> " + embarcacoes[i].embarcacao_info + "</p> Proprietário: "+ embarcacoes[i].utilizador_name );
 
                         infowindowEmb.open(map, marker);
                     }
                 })(markerEmb[i], i));
             }
 
-            new MarkerClusterer({ markerEmb, map });
 
 
 
@@ -450,14 +674,12 @@
                 markerEventos[i].setIcon('../images/EventoMarker.png')
                 google.maps.event.addListener(markerEventos[i], 'click', (function(marker, i) {
                     return function() {
-                        infoWindowEventos.setContent("Nome: " + locations[i].eventos_name + "<br>Info: " + locations[i].eventos_info + "<br>Date: "+ locations[i].eventos_date + "<br>Start Time: "+  locations[i].eventos_starttime  + "<br>End Time: "+ locations[i].eventos_endtime );
+                        infoWindowEventos.setContent("<h1> " + locations[i].eventos_name + "</h1>    " + locations[i].eventos_info + "<br><br><b>Data:</b> "+ locations[i].eventos_date + "<br><b>Hora de começo</b>: "+  locations[i].eventos_starttime  + "<br><b>Hora de término</b>: "+ locations[i].eventos_endtime );
 
                         infoWindowEventos.open(map, marker);
                     }
                 })(markerEventos[i], i));
             }
-            var markerCluster = new MarkerClusterer({ markerEventos, map });
-            markerCluster.setMap(map)
 
 
         }
@@ -471,19 +693,39 @@
                 markerEmb[i].setMap(null);
             }
             heatmap.setMap(null);
+            markerClusterEventos.removeMarkers(markerEventos);
+            markerClusterEmb.removeMarkers(markerEmb);
+
+
+
         }
         function showMarkerEmb() {
             clearMarkers()
             for(i in markerEmb){
                 markerEmb[i].setMap(map);
             }
+            markerClusterEmb.addMarkers(markerEmb)
         }
         function showMarkersEventos() {
             clearMarkers()
             for(i in markerEventos){
                 markerEventos[i].setMap(map);
             }
+            markerClusterEventos.addMarkers(markerEventos)
+
         }
+
+        function showAllMarkers() {
+            clearMarkers();
+            for(i in markerEmb){
+                markerEmb[i].setMap(map);
+            }
+            for(i in markerEventos){
+                markerEventos[i].setMap(map);
+            }
+        }
+
+
 
         function activateHeatmap() {
             clearMarkers();
@@ -505,7 +747,8 @@
 
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAeXJMCul0dV0qlry9bSDTx9K9dKRLJZSY&libraries=visualization&callback=initMap"></script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?&key=AIzaSyAeXJMCul0dV0qlry9bSDTx9K9dKRLJZSY&libraries=visualization,places&callback=initMap"></script>
 
 
 </body>
