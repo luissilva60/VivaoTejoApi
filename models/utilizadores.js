@@ -23,7 +23,8 @@ module.exports.getUsers = async function() {
 module.exports.getUser = async function(id) {
     console.log("[userModel.getUser] id = " + JSON.stringify(id));
     try {
-        let sql = 'select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate from utilizador WHERE utilizador_id = $1';
+        let sql = `select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate, roles_name from utilizador                           
+            INNER JOIN roles r on utilizador.utilizador_role_id = r.roles_id WHERE utilizador_id = $1`;
         let result = await client.query(sql, [id]);
         let user = result.rows;
         if (user.length > 0) {
