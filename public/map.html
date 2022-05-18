@@ -674,7 +674,7 @@
                 markerEventos[i].setIcon('../images/EventoMarker.png')
                 google.maps.event.addListener(markerEventos[i], 'click', (function(marker, i) {
                     return function() {
-                        infoWindowEventos.setContent("<h1> " + locations[i].eventos_name + "</h1>    " + locations[i].eventos_info + "<br><br><b>Data:</b> "+ locations[i].eventos_date + "<br><b>Hora de começo</b>: "+  locations[i].eventos_starttime  + "<br><b>Hora de término</b>: "+ locations[i].eventos_endtime );
+                        infoWindowEventos.setContent("<h1> " + locations[i].eventos_name + "</h1>    " + locations[i].eventos_info + "<br><br><b>Data:</b> "+ locations[i].data + "<br><b>Hora de começo</b>: "+  locations[i].eventos_starttime  + "<br><b>Hora de término</b>: "+ locations[i].eventos_endtime );
 
                         infoWindowEventos.open(map, marker);
                     }

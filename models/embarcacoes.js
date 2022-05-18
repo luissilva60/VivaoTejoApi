@@ -142,3 +142,39 @@ module.exports.getNumberOfEmbarcacoesInPolygon = async function(id) {
 
 }
 
+module.exports.getVerifiedEmbarcacoes = async function() {
+    try {
+        let sql = `SELECT embarcacao.*, st_X(embarcacao_pos) lat, st_Y(embarcacao_pos)long, utilizador_name
+                   FROM embarcacao
+                            INNER JOIN utilizador
+                                       ON embarcacao.embarcacao_prop_id = utilizador.utilizador_id
+                   WHERE embarcacao_verification = true`;
+        let result = await client.query(sql);
+        let embarcacoes = result.rows;
+        console.log("[embarcacaoModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
+        return{status: 200, data: embarcacoes}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
+module.exports.getPendingEmbarcacoes = async function() {
+    try {
+        let sql = `SELECT embarcacao.*, st_X(embarcacao_pos) lat, st_Y(embarcacao_pos)long, utilizador_name
+                   FROM embarcacao
+                            INNER JOIN utilizador
+                                       ON embarcacao.embarcacao_prop_id = utilizador.utilizador_id 
+                   WHERE embarcacao_verification = false`;
+        let result = await client.query(sql);
+        let embarcacoes = result.rows;
+        console.log("[embarcacaoModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
+        return{status: 200, data: embarcacoes}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+

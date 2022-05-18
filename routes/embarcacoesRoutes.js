@@ -58,4 +58,18 @@ router.get('/intersection/number/:id(\\d+)', async function(req, res, next) {
 
 });
 
+router.get('/pending', async function(req, res, next) {
+    console.log("[embarcacoesRoutes] Retrieving all pending boats");
+    let result = await embarcacoesModel.getPendingEmbarcacoes();
+    res.status(result.status).send(result.data);
+
+});
+
+router.get('/verified', async function(req, res, next) {
+    console.log("[embarcacoesRoutes] Retrieving all verified boats");
+    let result = await embarcacoesModel.getVerifiedEmbarcacoes();
+    res.status(result.status).send(result.data);
+
+});
+
 module.exports = router;
