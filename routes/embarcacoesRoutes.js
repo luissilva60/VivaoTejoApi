@@ -75,7 +75,7 @@ router.get('/verified', async function(req, res, next) {
 router.put('/update/verification/:id(\\d+)', async function(req, res, next) {
     let id = req.params.id
     console.log("[embarcacoesRoutes] Verifying boat with id " + JSON.stringify(id));
-    let result = await embarcacoesModel.updateEmbarcacao(embarcacao);
+    let result = await embarcacoesModel.verifyEmbarcacao(id);
     res.status(result.status).send(result.data);
 
 });
