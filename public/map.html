@@ -384,7 +384,7 @@
 
 
             markerClusterEmb = new MarkerClusterer(map, [], clusterEmbOptions);
-            markerClusterEventos = new MarkerClusterer(map, [], clusterEventosOptions);
+            markerClusterEventos = new MarkerClusterer(map, [], clusterEmbOptions);
             getEventos();
 
 
@@ -667,7 +667,7 @@
 
             for (i = 0; i < locations.length; i++) {
                 markerEventos[i] = new google.maps.Marker({
-                    position: new google.maps.LatLng(locations[i].eventos_local.x, locations[i].eventos_local.y),
+                    position: new google.maps.LatLng(locations[i].lat, locations[i].long),
                     map: map
                 });
 
