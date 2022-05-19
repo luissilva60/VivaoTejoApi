@@ -56,4 +56,11 @@ router.get('/proprietarios', async function(req, res, next) {
 
 });
 
+router.get('/no/proprietarios', async function(req, res, next) {
+    console.log("[UtilizadoresRoutes] Retrieving all users except proprietarios");
+    let result = await userModel.getUsersExceptProp();
+    res.status(result.status).send(result.data);
+
+});
+
 module.exports = router;
