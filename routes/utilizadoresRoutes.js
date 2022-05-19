@@ -49,4 +49,11 @@ router.get('/login/:email/:password', async function(req, res, next) {
 
 });
 
+router.get('/proprietarios', async function(req, res, next) {
+    console.log("[UtilizadoresRoutes] Retrieving all proprietarios");
+    let result = await userModel.getUsersProp();
+    res.status(result.status).send(result.data);
+
+});
+
 module.exports = router;

@@ -118,5 +118,21 @@ module.exports.getUserLogin = async function(email, password) {
 
 }
 
+module.exports.getUsersProp = async function() {
+    try {
+        let sql = `select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate, roles_name from utilizador
+                            INNER JOIN roles r on utilizador.utilizador_role_id = r.roles_id
+                            where roles_id = 4`;
+        let result = await client.query(sql);
+        let users = result.rows;
+        console.log("[userModel.getUsers] Proprietários = " + JSON.stringify(users));
+        return{status: 200, data: users}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
 
 
