@@ -187,7 +187,8 @@ module.exports.verifyEmbarcacao = async function(id) {
 
 
         console.log("[embarcacaoModel.updateEmbarcacao] verifying embarcacao with id " + JSON.stringify(id));
-        return {status: 200, data: "Updated succesfully"};
+         var contentString = 'Verified embarcacao with id ' + JSON.stringify(id)
+        return {status: 200, data: contentString};
     }catch (err) {
         console.log(err);
         return { status: 500, data: err };
