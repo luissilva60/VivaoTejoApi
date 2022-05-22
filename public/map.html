@@ -425,7 +425,7 @@
             locationButton.textContent = "Current location";
             locationButton.classList.add("custom-map-control-button");
 
-            locationButton.addEventListener("click", () => {
+            function currentLocation () {
                 // Try HTML5 geolocation.
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
@@ -456,7 +456,10 @@
                     // Browser doesn't support Geolocation
                     handleLocationError(false, infoWindoGeolocation, map.getCenter());
                 }
-            });
+            }
+
+            locationButton.addEventListener("click", currentLocation)
+            window.onload = currentLocation
 
 
             function handleLocationError(browserHasGeolocation, infoWindow, pos) {
