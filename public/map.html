@@ -331,7 +331,7 @@
             <button id="eventos" onclick="showMarkersEventos();" class="btn btn-primary">Eventos</button>
             <button id="embarcacoes" onclick="showMarkerEmb();" class="btn btn-primary">Embarcações</button>
             <button id="heatmap" onclick="activateHeatmap();" class="btn btn-primary">HeatMap de Embarcações</button>
-            <button id="rota"  class="btn btn-primary">Última Rota</button>
+            <button id="rota"  onclick="rota();" class="btn btn-primary">Última Rota</button>
         </div>
         <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
         <button id="button" class="button" role="button">Current Location</button>
@@ -351,6 +351,9 @@
 
         var markerClusterEventos;
         var markerClusterEmb
+
+        var rotasEmb =  [];
+        var rotasPos;
 
 
 
@@ -430,6 +433,7 @@
 
 
 
+
             getEmbarcacoes();
 
             getCais();
@@ -437,7 +441,9 @@
             map.addListener("click", function removebutton(){
 
                 document.getElementById("rota").style.display="none";
-
+                for (var i = 0; i < rotasEmb.length ; i++){
+                    rotasEmb[i].setMap(null);
+                }
             });
 
 
@@ -683,51 +689,80 @@
 
             var infowindowEmb = new google.maps.InfoWindow()
 
-            var polyline = [];
             var latLngArray = [];
 
-            var bounds = [];
 
 
 
             console.log(embarcacoes);
 
             for (i = 0; i < embarcacoes.length; i++) {
+
+
+
                 markerEmb[i] = new google.maps.Marker({
                     position: new google.maps.LatLng(embarcacoes[i].lat, embarcacoes[i].long),
                     map: map
                 });
 
-                /*var ParseEmbRota = JSON.parse(embarcacoes[i].geojson);
-                console.log(embarcacoes[i].geojson)
-                var shell = ParseEmbRota.coordinates[0];
+                markerEmb[i].setIcon('../images/barco-a-vela.png')
 
+                var ParseEmbRota = JSON.parse(embarcacoes[i].geojson);
+                console.log(ParseEmbRota)
+
+                var shell = ParseEmbRota.coordinates;
                 latLngArray[i] = [];
-                bounds[i] = new google.maps.LatLngBounds();
-
                 for (let s = 0; s < shell.length; s++) {
                     var pt = new google.maps.LatLng(shell[s][0], shell[s][1]);
-                    bounds[i].extend(pt);
                     latLngArray[i].push(pt);
-
                 }
 
-                polyline[i] = new google.maps.Polyline({
-                    path: latLngArray,
-                    map: null
+                const lineSymbol = {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: 8,
+                    strokeColor: "#ffd15c",
+                    fillColor: "#FFFFFF",
+                    fillOpacity: 1,
+                    strokeOpacity: 0.3,
+                };
+                const dashedLineSymbol = {
+                    path: 'M 0,-1 0,1',
+                    strokeOpacity: 1,
+                    scale: 4
+                };
+
+                rotasEmb[i] = new google.maps.Polyline({
+                    path: latLngArray[i],
+                    icons: [
+
+                        {
+                            icon: lineSymbol,
+                            offset: "100%",
+                        }, {
+                            icon: dashedLineSymbol,
+                            offset: '0',
+                            repeat: '20px'
+                        }],
+
+                    geodesic: true,
+                    strokeColor:"#0000FF",
+                    strokeOpacity:0,
+                    strokeWeight:2
                 })
-*/
-                markerEmb[i].setIcon('../images/barco-a-vela.png')
+                animateCircle(rotasEmb[i]);
+                rotasEmb[i].setMap(null);
+
+
+
                 google.maps.event.addListener(markerEmb[i], 'click', (function(marker, i){
-
-
-
                     return function() {
-                        var rotaButton = document.getElementById("rota").style.display="inline-block";
-                       /* rotaButton.event.addListener('click', function (i){
-                            polyline[i].setMap(map);
-                            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-                        })*/
+                        document.getElementById("rota").style.display="inline-block"
+
+                        for (var y = 0; y < rotasEmb.length ; y++){
+                            rotasEmb[y].setMap(null);
+                        }
+
+                        rotasPos = i;
 
 
                         infowindowEmb.setContent("<h2>" + embarcacoes[i].embarcacao_name + "</h2><p> " + embarcacoes[i].embarcacao_info + "</p> Proprietário: "+ embarcacoes[i].utilizador_name );
@@ -741,6 +776,8 @@
 
 
         }
+
+
 
         const api_url2='https://cors-anywhere.herokuapp.com/https://vivaotejo.herokuapp.com/api/eventos'
         async function getEventos(){
@@ -785,6 +822,9 @@
             markerClusterEventos.removeMarkers(markerEventos);
             markerClusterEmb.removeMarkers(markerEmb);
             document.getElementById("rota").style.display="none";
+            for (var i = 0; i < rotasEmb.length ; i++){
+                rotasEmb[i].setMap(null);
+            }
 
 
 
@@ -835,7 +875,19 @@
         }
 
         function rota(){
+            rotasEmb[rotasPos].setMap(map);
 
+        }
+
+        function animateCircle(line) {
+            var count = 0;
+            window.setInterval(function() {
+                count = (count + 1) % 200;
+
+                var icons = line.get('icons');
+                icons[0].offset = (count / 2) + '%';
+                line.set('icons', icons);
+            }, 20);
         }
 
 
