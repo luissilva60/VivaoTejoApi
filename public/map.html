@@ -33,6 +33,10 @@
 
 
 
+
+
+
+
         /* CSS */
          .button{
              background-color: #0095ff;
@@ -245,6 +249,104 @@
             box-shadow: none;
         }
 
+        #rotasDiv  {
+            margin-right: 30px;
+            margin-left: 1000px;
+            margin-bottom: 300px;
+            display: inline-block;
+        }
+
+
+
+        .box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .box select {
+            background-color: #0563af;
+            color: white;
+            padding: 12px;
+            width: 200px;
+            border: none;
+            font-size: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            outline: none;
+        }
+
+        .box::before {
+            content: "\f13a";
+            font-family: FontAwesome;
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20%;
+            height: 100%;
+            text-align: center;
+            font-size: 28px;
+            line-height: 45px;
+            color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .box:hover::before {
+            color: rgba(255, 255, 255, 0.6);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .box select option {
+            padding: 30px;
+        }
+
+
+
+
+
+
+        #btnrota{
+            margin-top: 50px;
+            margin-left: 30%;
+            background-color: #0095ff;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.15385;
+            outline: none;
+            padding: 8px .8em;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: baseline;
+            white-space: nowrap;
+        }
+
+        #btnrota:hover,
+        #btnrota:focus {
+            background-color: #07c;
+        }
+
+        #btnrota:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+        }
+
+        #btnrota:active {
+            background-color: #0064bd;
+            box-shadow: none;
+        }
+
 
         #todos{
             background-color: #0095ff;
@@ -333,6 +435,31 @@
             <button id="heatmap" onclick="activateHeatmap();" class="btn btn-primary">HeatMap de Embarcações</button>
             <button id="rota"  onclick="rota();" class="btn btn-primary">Última Rota</button>
         </div>
+
+
+
+        <div id= "rotasDiv" class="our_text_box">
+            <p style="font-weight: bold;font-size:medium"> Método de Transporte: </p>
+            <div class="box">
+                <select id="mode">
+                    <option value="DRIVING">Condução</option>
+                    <option value="WALKING">Caminhar</option>
+                    <option value="BICYCLING">Bicicleta</option>
+                    <option value="TRANSIT">Transportes</option>
+                </select>
+            </div>
+            <!--<select id="mode" style="position: absolute; top:45px;" class="col-md-4">
+                <option value="DRIVING">Condução</option>
+                <option value="WALKING">Caminhar</option>
+                <option value="BICYCLING">Bicicleta</option>
+                <option value="TRANSIT">Trasportes</option>
+            </select>
+-->
+            <button onclick="calculateAndDisplayRoute()" id="btnrota">Rota</button>
+        </div>
+
+
+
         <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
         <button id="button" class="button" role="button">Current Location</button>
         <div id="map"></div>
@@ -355,13 +482,19 @@
         var rotasEmb =  [];
         var rotasPos;
 
+        var markerPos;
+
+
+
+
 
 
 
 
 
         function initMap(){
-
+            const directionsRenderer = new google.maps.DirectionsRenderer();
+            const directionsService = new google.maps.DirectionsService();
 
             //Map options
             let mapOptions = {
@@ -378,36 +511,30 @@
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
             heatmap = new google.maps.visualization.HeatmapLayer
 
-            var clusterStyles = [
+            var clusterStyles = [{
+                height: 53,
+                url: "https://github.com/googlemaps/js-marker-clusterer/tree/gh-pages/images/m1.png",
+                width: 53
+            },
                 {
-                    textColor: 'white',
-                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m1.png',
-                    height: 53,
-                    width: 52
-                },
-                {
-                    textColor: 'white',
-                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m2.png',
                     height: 56,
-                    width: 55
+                    url: "https://github.com/googlemaps/js-marker-clusterer/tree/gh-pages/images/m2.png",
+                    width: 56
                 },
                 {
-                    textColor: 'white',
-                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m3.png',
                     height: 66,
-                    width: 65
+                    url: "https://github.com/googlemaps/js-marker-clusterer/tree/gh-pages/images/m3.png",
+                    width: 66
                 },
                 {
-                    textColor: 'white',
-                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m4.png',
                     height: 78,
-                    width: 77
+                    url: "https://github.com/googlemaps/js-marker-clusterer/tree/gh-pages/images/m4.png",
+                    width: 78
                 },
                 {
-                    textColor: 'white',
-                    url: 'superstorefinder.net/support/wp-content/uploads/2015/07/m5.png',
                     height: 90,
-                    width: 89
+                    url: "https://github.com/googlemaps/js-marker-clusterer/tree/gh-pages/images/m5.png",
+                    width: 90
                 }
             ];
 
@@ -428,7 +555,7 @@
 
 
             markerClusterEmb = new MarkerClusterer(map, [], clusterEmbOptions);
-            markerClusterEventos = new MarkerClusterer(map, [], clusterEmbOptions);
+            markerClusterEventos = new MarkerClusterer(map, [], clusterEventosOptions);
             getEventos();
 
 
@@ -444,6 +571,8 @@
                 for (var i = 0; i < rotasEmb.length ; i++){
                     rotasEmb[i].setMap(null);
                 }
+
+                document.getElementById('rotasDiv').style.display="none"
             });
 
 
@@ -519,14 +648,7 @@
 
 
 
-            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-                infoWindow.setPosition(pos);
-                infoWindow.setContent(
-                    browserHasGeolocation
-                        ? "Error: The Geolocation service failed."
-                        : "Error: Your browser doesn't support geolocation."
-                );
-            }
+
 
             //GEo Coding search bar
             var input = document.getElementById('searchInput');
@@ -577,8 +699,8 @@
                 ].join(' ');
             }
 
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open(map, geocodingMarker);
+            infowindow1.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow1.open(map, geocodingMarker);
 
                 // Location details
                 for (var i = 0; i < place.address_components.length; i++) {
@@ -589,6 +711,17 @@
                         document.getElementById('country').innerHTML = place.address_components[i].long_name;
                     }
                 }
+            });
+
+            const rotaDiv = document.getElementById('rotasDiv');
+            rotaDiv.style.display="none"
+            map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(rotaDiv);
+
+            directionsRenderer.setMap(map);
+            directionsRenderer.setOptions( { suppressMarkers: true } );
+            calculateAndDisplayRoute(directionsService, directionsRenderer);
+            document.getElementById("btnrota").addEventListener("click", () => {
+                calculateAndDisplayRoute(directionsService, directionsRenderer)
             });
 
 
@@ -668,6 +801,8 @@
                 polygon[i].setMap(map);
 
                 google.maps.event.addListener(polygon[i], 'click', function(event) {
+                    document.getElementById('rotasDiv').style.display="inline-block"
+                    markerPos = new google.maps.LatLng(cais[i].lat_center, cais[i].long_center);
                     var contentString = "<h2>" + cais[i].cais_name + "</h2>    <p> " + cais[i].cais_info + "</p><p><b> Nº de barcos: </b>" + bic[i]+ "";
                     console.log(contentString)
                     infowindowCais.setContent(contentString);
@@ -756,6 +891,7 @@
 
                 google.maps.event.addListener(markerEmb[i], 'click', (function(marker, i){
                     return function() {
+                        document.getElementById('rotasDiv').style.display="none"
                         document.getElementById("rota").style.display="inline-block"
 
                         for (var y = 0; y < rotasEmb.length ; y++){
@@ -794,10 +930,14 @@
                     map: map
                 });
 
+
+
                 markerEventos[i].setIcon('../images/EventoMarker.png')
                 google.maps.event.addListener(markerEventos[i], 'click', (function(marker, i) {
                     return function() {
+                        document.getElementById('rotasDiv').style.display="inline-block"
                         document.getElementById("rota").style.display="none";
+                        markerPos = new google.maps.LatLng(locations[i].lat, locations[i].long);
                         infoWindowEventos.setContent("<h1> " + locations[i].eventos_name + "</h1>    " + locations[i].eventos_info + "<br><br><b>Data:</b> "+ locations[i].data + "<br><b>Hora de começo</b>: "+  locations[i].eventos_starttime  + "<br><b>Hora de término</b>: "+ locations[i].eventos_endtime );
 
                         infoWindowEventos.open(map, marker);
@@ -806,6 +946,54 @@
             }
 
 
+        }
+        var pos;
+
+
+        function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+            const selectedMode = document.getElementById("mode").value
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        };
+                    },
+                );
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+
+            console.log(pos)
+
+            directionsService
+                .route({
+                    origin: pos,
+                    destination: markerPos,
+
+                    travelMode: google.maps.TravelMode[selectedMode],
+
+                })
+
+                .then((response) => {
+                    directionsRenderer.setDirections(response);
+                })
+        }
+
+
+
+
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(
+                browserHasGeolocation
+                    ? "Error: The Geolocation service failed."
+                    : "Error: Your browser doesn't support geolocation."
+            );
         }
 
 
@@ -822,6 +1010,7 @@
             markerClusterEventos.removeMarkers(markerEventos);
             markerClusterEmb.removeMarkers(markerEmb);
             document.getElementById("rota").style.display="none";
+            document.getElementById('rotasDiv').style.display="none";
             for (var i = 0; i < rotasEmb.length ; i++){
                 rotasEmb[i].setMap(null);
             }
