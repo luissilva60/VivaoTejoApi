@@ -163,6 +163,46 @@
             box-shadow: none;
         }
 
+        #rota{
+            background-color: #0095ff;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            display: none;
+            font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.15385;
+            margin: 0;
+            outline: none;
+            padding: 8px .8em;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            vertical-align: baseline;
+            white-space: nowrap;
+        }
+
+        #rota:hover,
+        #rota:focus {
+            background-color: #07c;
+        }
+
+        #rota:focus {
+            box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+        }
+
+        #rota:active {
+            background-color: #0064bd;
+            box-shadow: none;
+        }
+
 
 
         #embarcacoes{
@@ -291,6 +331,7 @@
             <button id="eventos" onclick="showMarkersEventos();" class="btn btn-primary">Eventos</button>
             <button id="embarcacoes" onclick="showMarkerEmb();" class="btn btn-primary">Embarcações</button>
             <button id="heatmap" onclick="activateHeatmap();" class="btn btn-primary">HeatMap de Embarcações</button>
+            <button id="rota"  class="btn btn-primary">Última Rota</button>
         </div>
         <input id="searchInput" class="controls" type="text" placeholder="Enter a location">
         <button id="button" class="button" role="button">Current Location</button>
@@ -393,6 +434,12 @@
 
             getCais();
 
+            map.addListener("click", function removebutton(){
+
+                document.getElementById("rota").style.display="none";
+
+            });
+
 
 
 
@@ -424,6 +471,7 @@
             map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
             locationButton.textContent = "Current location";
             locationButton.classList.add("custom-map-control-button");
+
 
             function currentLocation () {
                 // Try HTML5 geolocation.
@@ -460,6 +508,9 @@
 
             locationButton.addEventListener("click", currentLocation)
             window.onload = currentLocation
+
+
+
 
 
             function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -545,7 +596,7 @@
             console.log(cais)
             var data
             var infowindowCais= new google.maps.InfoWindow()
-            var ttPoly = [];
+            var polygon = [];
             var color = [];
             var bounds = [];
             var latLngArray = [];
@@ -583,8 +634,6 @@
 
 
                 for (let s = 0; s < shell.length; s++) {
-                    console.log("Latitude: " + shell[s][0]);
-                    console.log("Longitude: "+ shell[s][1]);
                     var pt = new google.maps.LatLng(shell[s][0], shell[s][1]);
                     bounds[i].extend(pt);
                     latLngArray[i].push(pt);
@@ -602,7 +651,7 @@
                 console.log(latLngArray);
                 // Polygon construction.
 
-                ttPoly[i] = new google.maps.Polygon({
+                polygon[i] = new google.maps.Polygon({
                     paths: latLngArray[i],
                     strokeColor: color[i],
                     strokeOpacity: 0.2,
@@ -610,9 +659,9 @@
                     fillColor: color[i],
                     fillOpacity: 0.2
                 });
-                ttPoly[i].setMap(map);
+                polygon[i].setMap(map);
 
-                google.maps.event.addListener(ttPoly[i], 'click', function(event) {
+                google.maps.event.addListener(polygon[i], 'click', function(event) {
                     var contentString = "<h2>" + cais[i].cais_name + "</h2>    <p> " + cais[i].cais_info + "</p><p><b> Nº de barcos: </b>" + bic[i]+ "";
                     console.log(contentString)
                     infowindowCais.setContent(contentString);
@@ -634,6 +683,11 @@
 
             var infowindowEmb = new google.maps.InfoWindow()
 
+            var polyline = [];
+            var latLngArray = [];
+
+            var bounds = [];
+
 
 
             console.log(embarcacoes);
@@ -644,9 +698,38 @@
                     map: map
                 });
 
+                /*var ParseEmbRota = JSON.parse(embarcacoes[i].geojson);
+                console.log(embarcacoes[i].geojson)
+                var shell = ParseEmbRota.coordinates[0];
+
+                latLngArray[i] = [];
+                bounds[i] = new google.maps.LatLngBounds();
+
+                for (let s = 0; s < shell.length; s++) {
+                    var pt = new google.maps.LatLng(shell[s][0], shell[s][1]);
+                    bounds[i].extend(pt);
+                    latLngArray[i].push(pt);
+
+                }
+
+                polyline[i] = new google.maps.Polyline({
+                    path: latLngArray,
+                    map: null
+                })
+*/
                 markerEmb[i].setIcon('../images/barco-a-vela.png')
                 google.maps.event.addListener(markerEmb[i], 'click', (function(marker, i){
+
+
+
                     return function() {
+                        var rotaButton = document.getElementById("rota").style.display="inline-block";
+                       /* rotaButton.event.addListener('click', function (i){
+                            polyline[i].setMap(map);
+                            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                        })*/
+
+
                         infowindowEmb.setContent("<h2>" + embarcacoes[i].embarcacao_name + "</h2><p> " + embarcacoes[i].embarcacao_info + "</p> Proprietário: "+ embarcacoes[i].utilizador_name );
 
                         infowindowEmb.open(map, marker);
@@ -677,6 +760,7 @@
                 markerEventos[i].setIcon('../images/EventoMarker.png')
                 google.maps.event.addListener(markerEventos[i], 'click', (function(marker, i) {
                     return function() {
+                        document.getElementById("rota").style.display="none";
                         infoWindowEventos.setContent("<h1> " + locations[i].eventos_name + "</h1>    " + locations[i].eventos_info + "<br><br><b>Data:</b> "+ locations[i].data + "<br><b>Hora de começo</b>: "+  locations[i].eventos_starttime  + "<br><b>Hora de término</b>: "+ locations[i].eventos_endtime );
 
                         infoWindowEventos.open(map, marker);
@@ -686,6 +770,8 @@
 
 
         }
+
+
 
 
         function clearMarkers() {
@@ -698,6 +784,7 @@
             heatmap.setMap(null);
             markerClusterEventos.removeMarkers(markerEventos);
             markerClusterEmb.removeMarkers(markerEmb);
+            document.getElementById("rota").style.display="none";
 
 
 
@@ -746,6 +833,12 @@
             heatmap.setData(_points);
             heatmap.setMap(map);
         }
+
+        function rota(){
+
+        }
+
+
 
 
 
