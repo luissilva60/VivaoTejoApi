@@ -10,7 +10,7 @@ client.connect();
 
 module.exports.getEmbarcacoes = async function() {
     try {
-        let sql = `SELECT embarcacao.*, st_X(embarcacao_pos) lat, st_Y(embarcacao_pos)long, utilizador_name
+        let sql = `SELECT embarcacao.*, st_X(embarcacao_pos) lat, st_Y(embarcacao_pos)long, utilizador_name, ST_AsGeoJSON(embarcacao_rota) geojson
                    FROM embarcacao
                             INNER JOIN utilizador
                                        ON embarcacao.embarcacao_prop_id = utilizador.utilizador_id`;
@@ -194,4 +194,6 @@ module.exports.verifyEmbarcacao = async function(id) {
         return { status: 500, data: err };
     }
 }
+
+
 
