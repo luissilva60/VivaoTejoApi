@@ -484,7 +484,8 @@
 
         var markerPos;
 
-
+        var directionsRenderer;
+        var directionsService;
 
 
 
@@ -493,9 +494,8 @@
 
 
         function initMap(){
-            const directionsRenderer = new google.maps.DirectionsRenderer();
-            const directionsService = new google.maps.DirectionsService();
-
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsService = new google.maps.DirectionsService();
             //Map options
             let mapOptions = {
                 center: new google.maps.LatLng('38.654077198334306', '-8.99502557883541'),
@@ -573,25 +573,9 @@
                 }
 
                 document.getElementById('rotasDiv').style.display="none"
+
+                directionsRenderer.setMap(null);
             });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             const filtersButtons = document.getElementById('filters');
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(filtersButtons);
@@ -802,6 +786,7 @@
 
                 google.maps.event.addListener(polygon[i], 'click', function(event) {
                     document.getElementById('rotasDiv').style.display="inline-block"
+                    directionsRenderer.setMap(null);
                     markerPos = new google.maps.LatLng(cais[i].lat_center, cais[i].long_center);
                     var contentString = "<h2>" + cais[i].cais_name + "</h2>    <p> " + cais[i].cais_info + "</p><p><b> Nº de barcos: </b>" + bic[i]+ "";
                     console.log(contentString)
@@ -893,6 +878,7 @@
                     return function() {
                         document.getElementById('rotasDiv').style.display="none"
                         document.getElementById("rota").style.display="inline-block"
+                        directionsRenderer.setMap(null);
 
                         for (var y = 0; y < rotasEmb.length ; y++){
                             rotasEmb[y].setMap(null);
@@ -937,10 +923,15 @@
                     return function() {
                         document.getElementById('rotasDiv').style.display="inline-block"
                         document.getElementById("rota").style.display="none";
+                        directionsRenderer.setMap(null);
                         markerPos = new google.maps.LatLng(locations[i].lat, locations[i].long);
+                        for (var y = 0; y < rotasEmb.length ; y++){
+                            rotasEmb[y].setMap(null);
+                        }
                         infoWindowEventos.setContent("<h1> " + locations[i].eventos_name + "</h1>    " + locations[i].eventos_info + "<br><br><b>Data:</b> "+ locations[i].data + "<br><b>Hora de começo</b>: "+  locations[i].eventos_starttime  + "<br><b>Hora de término</b>: "+ locations[i].eventos_endtime );
 
                         infoWindowEventos.open(map, marker);
+
                     }
                 })(markerEventos[i], i));
             }
@@ -951,6 +942,7 @@
 
 
         function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+            directionsRenderer.setMap(map);
             const selectedMode = document.getElementById("mode").value
 
             if (navigator.geolocation) {
