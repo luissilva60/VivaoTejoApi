@@ -8,7 +8,7 @@ client.connect();
 
 module.exports.getArtigos = async function() {
     try {
-        let sql = `select *, utilizador_name,to_char(artigos_date, \'DD-MM-YYYY\') data from artigos
+        let sql = `select artigos.*, utilizador_name,to_char(artigos_date, \'DD-MM-YYYY\') data from artigos
             inner join utilizador u on u.utilizador_id = artigos.artigos_ut_id`;
         let result = await client.query(sql);
         let artigos = result.rows;
@@ -24,7 +24,7 @@ module.exports.getArtigos = async function() {
 module.exports.getArtigo = async function(id) {
     console.log("[artigosModel.getArtigo] id = " + JSON.stringify(id));
     try {
-        let sql = `select *, utilizador_name, to_char(artigos_date, \'DD-MM-YYYY\') from artigos
+        let sql = `select artigos.*, utilizador_name, to_char(artigos_date, \'DD-MM-YYYY\') from artigos
             inner join utilizador u on u.utilizador_id = artigos.artigos_ut_id
                    WHERE artigos_id = $1`;
         let result = await client.query(sql, [id]);
