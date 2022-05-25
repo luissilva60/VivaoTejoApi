@@ -118,6 +118,26 @@ module.exports.getUserLogin = async function(email, password) {
 
 }
 
+module.exports.getLogin = async function(user) {
+    console.log("[userModel.getUser] Login = "+ JSON.stringify(user));
+    try {
+        let sql = `select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate from utilizador WHERE utilizador_email = '${user.email}' AND utilizador_password = '${user.password}'`;
+        let result = await client.query(sql);
+        let user = result.rows;
+        if (user.length > 0) {
+            console.log("[userModel.getUser] user = " + JSON.stringify(user[0]));
+            return { status: 200, data: user[0] };
+        } else {
+            return { status: 404, data: { msg: "User not found." } };
+        }
+
+    } catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
 module.exports.getUsersProp = async function() {
     try {
         let sql = `select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate, roles_name from utilizador

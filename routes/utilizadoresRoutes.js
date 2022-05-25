@@ -49,6 +49,14 @@ router.get('/login/:email/:password', async function(req, res, next) {
 
 });
 
+router.get('/login', async function(req, res, next) {
+    let user = req.body;
+    console.log("[UtilizadoresRoutes] Login: " + JSON.stringify(user));
+    let result = await userModel.getLogin(user);
+    res.status(result.status).send(result.data);
+
+});
+
 router.get('/proprietarios', async function(req, res, next) {
     console.log("[UtilizadoresRoutes] Retrieving all proprietarios");
     let result = await userModel.getUsersProp();
