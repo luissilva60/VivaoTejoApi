@@ -8,7 +8,8 @@ client.connect();
 
 module.exports.getArtigos = async function() {
     try {
-        let sql = 'select * from artigos';
+        let sql = `select *, utilizador_name,to_char(artigos_date, \'DD-MM-YYYY\') data from artigos
+            inner join utilizador u on u.utilizador_id = artigos.artigos_ut_id`;
         let result = await client.query(sql);
         let artigos = result.rows;
         console.log("[artigosModel.getArtigos] artigos = " + JSON.stringify(artigos));
@@ -23,7 +24,9 @@ module.exports.getArtigos = async function() {
 module.exports.getArtigo = async function(id) {
     console.log("[artigosModel.getArtigo] id = " + JSON.stringify(id));
     try {
-        let sql = 'select * from artigos WHERE artigos_id = $1';
+        let sql = `select *, utilizador_name, to_char(artigos_date, \'DD-MM-YYYY\') from artigos
+            inner join utilizador u on u.utilizador_id = artigos.artigos_ut_id
+                   WHERE artigos_id = $1`;
         let result = await client.query(sql, [id]);
         let artigo = result.rows;
         if (artigo.length > 0) {
@@ -48,7 +51,7 @@ module.exports.addArtigo = async function(artigo) {
             return { status: 400, data: { msg: "Malformed data" } };
     }
     try {
-        let sql = `insert into artigo(artigo_title, artigo_subtitle, artigo_info,artigo_date, artigo_ut_id) 
+        let sql = `insert into artigos(artigos_title, artigos_subtitle, artigos_info,artigos_date, artigos_ut_id) 
     values('${artigo.title}', '${artigo.subtitle}', '${artigo.info}', '${artigo.date}',${artigo.utId})`
         let result = await client.query(sql);
         let artigos = result.rows[0];
@@ -81,13 +84,13 @@ module.exports.updateArtigo = async function(artigo) {
         else
             return { status: 400, data: { msg: "Malformed data" } };
     } try {
-        let updateQuery = `update embarcacao
+        let updateQuery = `update artigos
                        set artigos_title = '${artigo.title}',
                         artigos_subtitle= '${artigo.subtitle}',
                         artigos_info = '${artigo.info}',
                         artigos_date = '${artigo.date}',
                         artigos_ut_id = '${artigo.utId}'
-                       where artigos = ${artigo.id}`
+                       where artigos_id = ${artigo.id}`
         let result = await client.query(updateQuery);
 
 

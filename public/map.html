@@ -266,9 +266,8 @@
         }
 
        /* #floating-panel  {
-            margin-right: 30px;
-            margin-left: 1000px;
-            margin-bottom: 300px;
+
+            margin-left: 40px;
             display: inline-block;
         }*/
 
@@ -685,7 +684,7 @@
 
             const rotaDiv = document.getElementById('floating-panel');
             rotaDiv.style.display="none"
-            map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(rotaDiv);
+            map.controls[google.maps.ControlPosition.LEFT_CENTER].push(rotaDiv);
 
 
             directionsRenderer.setOptions( { suppressMarkers: true } );
