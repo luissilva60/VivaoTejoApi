@@ -49,7 +49,7 @@ router.get('/login/:email/:password', async function(req, res, next) {
 
 });
 
-router.get('/login', async function(req, res, next) {
+router.post('/login', async function(req, res, next) {
     let user = req.body;
     console.log("[UtilizadoresRoutes] Login: " + JSON.stringify(user));
     let result = await userModel.getLogin(user);
