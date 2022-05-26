@@ -251,10 +251,14 @@
 
         #floating-panel{
 
-            position:relative;
+            position:absolute;
             background-color: #0077cc;
-            top:10px;
+            top:20%;
             left:10%;
+            right: 20%;
+            width: 200px;
+            height: 150px;
+            margin-left: 5%;
             z-index:5;
             border:1px solid#999;
             text-align:center;
@@ -284,7 +288,7 @@
             background-color: #0563af;
             color: white;
             padding: 12px;
-            width: 200px;
+            width: 150px;
             border: none;
             font-size: 15px;
             box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
@@ -454,7 +458,7 @@
 
 
         <div id= "floating-panel" class="our_text_box">
-            <p style="font-weight: bold;font-size:medium;color: gold"> Método de Transporte: </p>
+            <p style="font-weight: bold;font-size:medium;color: white"> Método de Transporte: </p>
             <div class="box">
                 <select id="mode">
                     <option value="DRIVING">Condução</option>
