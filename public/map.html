@@ -576,14 +576,14 @@
 
             markerClusterEmb = new MarkerClusterer(map, [], clusterEmbOptions);
             markerClusterEventos = new MarkerClusterer(map, [], clusterEventosOptions);
-            getEventos();
+            //getEventos();
 
 
 
 
-            getEmbarcacoes();
+            //getEmbarcacoes();
 
-            getCais();
+            //getCais();
 
             map.addListener("click", function removebutton(){
                 closeLastOpenedInfoWindow();
@@ -615,7 +615,7 @@
 
 
             locationButton.addEventListener("click", currentLocation)
-            window.onload = currentLocation()
+            //window.onload = currentLocation()
 
 
 
@@ -696,6 +696,8 @@
             document.getElementById("btnrota").addEventListener("click", () => {
                 calculateAndDisplayRoute(directionsService, directionsRenderer)
             });
+
+
 
 
 
