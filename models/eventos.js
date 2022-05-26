@@ -7,6 +7,22 @@ const app = express();
 client.connect();
 module.exports.getEventos = async function() {
     try {
+        let sql = 'select *, to_char(eventos_date, \'DD-MM-YYYY\') data, st_x(eventos_local)lat , st_y(eventos_local) long from eventos';
+        let result = await client.query(sql);
+        let eventos = result.rows;
+        console.log("[eventosModel.getEventos] eventos = " + JSON.stringify(eventos));
+        return{status: 200, data: eventos}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
+
+client.connect();
+module.exports.getOrderedUpcomingEventos = async function() {
+    try {
         let sql = 'select *, to_char(eventos_date, \'DD-MM-YYYY\') data, st_x(eventos_local)lat , st_y(eventos_local) long from eventos WHERE eventos_date > now() ORDER BY eventos_date ASC';
         let result = await client.query(sql);
         let eventos = result.rows;
