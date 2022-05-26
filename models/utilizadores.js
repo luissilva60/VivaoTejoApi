@@ -100,6 +100,7 @@ module.exports.updateUser = async function(user) {
 
 module.exports.getUserLogin = async function(email, password) {
     console.log("[userModel.getUser] Login = Email: " + JSON.stringify(email)+ " Password: "+ + JSON.stringify(password));
+
     try {
         let sql = `select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate from utilizador WHERE utilizador_email = '${email}' AND utilizador_password = '${password}'`;
         let result = await client.query(sql);
@@ -107,6 +108,31 @@ module.exports.getUserLogin = async function(email, password) {
         if (user.length > 0) {
             console.log("[userModel.getUser] user = " + JSON.stringify(user[0]));
             return { status: 200, data: user[0] };
+        } else {
+            return { status: 404, data: { msg: "User not found." } };
+        }
+
+    } catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
+module.exports.getLogin = async function(user) {
+    console.log("[userModel.getUser] Login = "+ JSON.stringify(user));
+    if (typeof user != "object" ) {
+        if (user.errMsg)
+            return { status: 400, data: { msg: user.errMsg } };
+        else
+            return { status: 400, data: { msg: "Malformed data" } };
+    }try {
+        let sql = `select *, to_char(utilizador_bdate, \'DD-MM-YYYY\') bdate from utilizador WHERE utilizador_email = '${user.email}' AND utilizador_password = '${user.password}'`;
+        let result = await client.query(sql);
+        let userResult = result.rows;
+        if (userResult.length > 0) {
+            console.log("[userModel.getUser] user = " + JSON.stringify(userResult[0]));
+            return { status: 200, data: userResult[0] };
         } else {
             return { status: 404, data: { msg: "User not found." } };
         }

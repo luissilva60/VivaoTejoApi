@@ -22,7 +22,7 @@ module.exports.getEventos = async function() {
 module.exports.getEvento = async function(id) {
     console.log("eventosModel.getEvento] id = " + JSON.stringify(id));
     try {
-        let sql = 'select * from eventos WHERE eventos_id = $1';
+        let sql = 'select *, to_char(eventos_date, \'DD-MM-YYYY\') data, st_x(eventos_local)lat , st_y(eventos_local) long from eventos WHERE eventos_id = $1';
         let result = await client.query(sql, [id]);
         let evento = result.rows;
         if (evento.length > 0) {
