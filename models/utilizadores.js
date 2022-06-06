@@ -21,6 +21,23 @@ module.exports.getUsers = async function() {
 
 }
 
+module.exports.getUserCount = async function() {
+    try {
+        let sql = `select count(*), roles_name from utilizador
+                            inner join roles r on r.roles_id = utilizador.utilizador_role_id
+                   group by roles_id`;
+        let result = await client.query(sql);
+        let users = result.rows;
+        console.log("[userModel.getUsers] Users = " + JSON.stringify(users));
+        return{status: 200, data: users}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
+
 module.exports.getUser = async function(id) {
     console.log("[userModel.getUser] id = " + JSON.stringify(id));
     try {
