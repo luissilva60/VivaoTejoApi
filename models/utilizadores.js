@@ -23,7 +23,7 @@ module.exports.getUsers = async function() {
 
 module.exports.getUserCount = async function() {
     try {
-        let sql = `select count(*), roles_name from utilizador
+        let sql = `select  roles_name, count(*) from utilizador
                             inner join roles r on r.roles_id = utilizador.utilizador_role_id
                    group by roles_id`;
         let result = await client.query(sql);
