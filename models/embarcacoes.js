@@ -45,6 +45,9 @@ module.exports.getEmbarcacao = async function(id) {
 
 }
 
+
+
+
 module.exports.addEmbarcacao = async function(embarcacao) {
     if (typeof embarcacao != "object" ) {
         if (embarcacao.errMsg)

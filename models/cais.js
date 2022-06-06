@@ -20,6 +20,26 @@ module.exports.getCais = async function() {
 
 }
 
+module.exports.getCountInCais = async function() {
+    try {
+        let sql = `Select cais_name, count(*) from cais, embarcacao
+    WHERE ST_Intersects( cais_spot , embarcacao_pos) = true
+    group by cais_id
+`;
+        let result = await client.query(sql);
+        let cais = result.rows;
+        console.log("[caisModel.getCais] cais = " + JSON.stringify(cais));
+        return{status: 200, data: cais}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
+
+
+
 module.exports.get1Cais = async function(id) {
     console.log("[caisModel.get1Cais] id = " + JSON.stringify(id));
     try {
