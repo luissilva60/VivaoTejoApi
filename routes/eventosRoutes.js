@@ -14,6 +14,13 @@ router.get('/upcoming', async function(req, res, next) {
     res.status(result.status).send(result.data);
 
 });
+
+router.get('/count/by/state', async function(req, res, next) {
+    console.log("[eventosRoutes] Retrieving all counts for each state_event");
+    let result = await eventosModel.getStateEventCount();
+    res.status(result.status).send(result.data);
+
+});
 router.get('/:id(\\d+)', async function(req, res, next) {
     let id = req.params.id
     console.log("[eventosRoutes] event with id: "+ id);
@@ -45,5 +52,8 @@ router.put('/update', async function(req, res, next) {
     res.status(result.status).send(result.data);
 
 });
+
+
+
 
 module.exports = router;
