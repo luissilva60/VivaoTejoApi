@@ -8,6 +8,17 @@ router.get('', async function(req, res, next) {
     res.status(result.status).send(result.data);
 
 });
+
+
+router.get('/count', async function(req, res, next) {
+    console.log("[artigosRoutes] Retrieving all  number of artigos");
+    let result = await artigosModel.getNumberArtigos();
+    res.status(result.status).send(result.data);
+
+});
+
+
+
 router.get('/:id(\\d+)', async function(req, res, next) {
     let id = req.params.id
     console.log("[artigosRoutes] artigo with id: "+ id);

@@ -21,6 +21,21 @@ module.exports.getArtigos = async function() {
 
 }
 
+module.exports.getNumberArtigos = async function() {
+    try {
+        let sql = `select count(*) from artigos
+            inner join utilizador u on u.utilizador_id = artigos.artigos_ut_id`;
+        let result = await client.query(sql);
+        let artigos = result.rows;
+        console.log("[artigosModel.getArtigos] artigos count  = " + JSON.stringify(artigos));
+        return{status: 200, data: artigos}
+    }catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
 module.exports.getArtigo = async function(id) {
     console.log("[artigosModel.getArtigo] id = " + JSON.stringify(id));
     try {
