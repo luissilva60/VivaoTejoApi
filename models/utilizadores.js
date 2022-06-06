@@ -33,7 +33,7 @@ module.exports.getUserCount = async function() {
     }catch (err) {
         console.log(err);
         return { status: 500, data: err };
-    }
+    }a
 
 }
 
