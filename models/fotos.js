@@ -7,7 +7,7 @@ const app = express();
 client.connect();
 module.exports.getFotos = async function() {
     try {
-        let sql = `select * from fotos`;
+        let sql = `select * from fotos order by fotos_id`;
         let result = await client.query(sql);
         let fotos = result.rows;
         console.log("[fotosModel.getFotos] fotos = " + JSON.stringify(fotos));

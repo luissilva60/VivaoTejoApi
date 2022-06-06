@@ -12,8 +12,10 @@ module.exports.getEmbarcacoes = async function() {
     try {
         let sql = `SELECT embarcacao.*, st_X(embarcacao_pos) lat, st_Y(embarcacao_pos)long, utilizador_name, ST_AsGeoJSON(embarcacao_rota) geojson
                    FROM embarcacao
+                    
                             INNER JOIN utilizador
-                                       ON embarcacao.embarcacao_prop_id = utilizador.utilizador_id`;
+                                       ON embarcacao.embarcacao_prop_id = utilizador.utilizador_id
+                   order by embarcacao_id`;
         let result = await client.query(sql);
         let embarcacoes = result.rows;
         console.log("[embarcacaoModel.getEmbarcacoes] embarcacoes = " + JSON.stringify(embarcacoes));
