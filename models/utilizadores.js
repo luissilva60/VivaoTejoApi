@@ -67,8 +67,8 @@ module.exports.addUser = async function(user) {
             return { status: 400, data: { msg: "Malformed data" } };
     }
     try {
-        let sql = `insert into utilizador(utilizador_name, utilizador_bdate, utilizador_gender,utilizador_email, utilizador_password, utilizador_role_id) 
-    values('${user.name}', '${user.bdate}', '${user.gender}', '${user.email}', '${user.password}',${user.roleId})`
+        let sql = `insert into utilizador(utilizador_name, utilizador_bdate, utilizador_gender,utilizador_email, utilizador_password) 
+    values('${user.name}', '${user.bdate}', '${user.gender}', '${user.email}', '${user.password}')`
         let result = await client.query(sql);
         let users = result.rows[0];
         console.log("[userModel.addUser] user = " + JSON.stringify(users));
