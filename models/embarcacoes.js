@@ -58,8 +58,8 @@ module.exports.addEmbarcacao = async function(embarcacao) {
             return { status: 400, data: { msg: "Malformed data" } };
     }
     try {
-        let sql = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id, embarcacao_pos) 
-    values('${embarcacao.name}', '${embarcacao.info}', ${embarcacao.propId}, '${embarcacao.pos}')`
+        let sql = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id, embarcacao_pos, embarcacao_rota) 
+    values('${embarcacao.name}', '${embarcacao.info}', ${embarcacao.propId}, '${embarcacao.pos}', '${embarcacao.rota}')`
         let result = await client.query(sql);
         let embarcacoes = result.rows[0];
         console.log("[embarcacaoModel.addEmbarcacao] embarcacao = " + JSON.stringify(embarcacoes));
@@ -206,7 +206,7 @@ module.exports.getAllEmbarcacoesFromUser = async function(id) {
         let result = await client.query(sql, [id]);
         let embarcacoes = result.rows;
         if (embarcacoes.length > 0) {
-            console.log("[embarcacaoModel.getAllEmbarcacoesFromUser] embarcacao = " + JSON.stringify(embarcacoes[0]));
+            console.log("[embarcacaoModel.getAllEmbarcacoesFromUser] embarcacao = " + JSON.stringify(embarcacoes));
             return { status: 200, data: embarcacoes };
         } else {
             return { status: 404, data: { msg: "Embarcacao not found." } };
