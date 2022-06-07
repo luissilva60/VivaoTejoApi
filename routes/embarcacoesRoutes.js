@@ -81,9 +81,9 @@ router.put('/update/verification/:id(\\d+)', async function(req, res, next) {
 });
 
 router.get('/prop/:id(\\d+)', async function(req, res, next) {
-    let id = req.params.id
-    console.log("[embarcacoesRoutes] Show all boats of proprietario with id: "+ id);
-    let result = await embarcacoesModel.getAllEmbarcacoesFromUser(id);
+    let id1 = req.params.id
+    console.log("[embarcacoesRoutes] Show all boats of proprietario with id: "+ id1);
+    let result = await embarcacoesModel.getAllEmbarcacoesFromUser(id1);
     res.status(result.status).send(result.data);
 
 });
