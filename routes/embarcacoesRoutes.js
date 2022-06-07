@@ -80,7 +80,7 @@ router.put('/update/verification/:id(\\d+)', async function(req, res, next) {
 
 });
 
-router.post('/prop/:id(\\d+)', async function(req, res, next) {
+router.get('/prop/:id(\\d+)', async function(req, res, next) {
     let id = req.params.id
     console.log("[embarcacoesRoutes] Show all boats of proprietario with id: "+ id);
     let result = await embarcacoesModel.getAllEmbarcacoesFromUser(id);
