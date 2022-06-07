@@ -58,8 +58,8 @@ module.exports.addEmbarcacao = async function(embarcacao) {
             return { status: 400, data: { msg: "Malformed data" } };
     }
     try {
-        let sql = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id, embarcacao_pos, embarcacao_rota) 
-    values('${embarcacao.name}', '${embarcacao.info}', '${embarcacao.propId}', ${embarcacao.pos},  ${embarcacao.rota})`
+        let sql = `insert into embarcacao(embarcacao_name, embarcacao_info, embarcacao_prop_id, embarcacao_pos) 
+    values('${embarcacao.name}', '${embarcacao.info}', '${embarcacao.propId}', ${embarcacao.pos})`
         let result = await client.query(sql);
         let embarcacoes = result.rows[0];
         console.log("[embarcacaoModel.addEmbarcacao] embarcacao = " + JSON.stringify(embarcacoes));
