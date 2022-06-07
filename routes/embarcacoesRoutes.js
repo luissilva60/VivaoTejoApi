@@ -80,4 +80,14 @@ router.put('/update/verification/:id(\\d+)', async function(req, res, next) {
 
 });
 
+router.delete('/prop/:id(\\d+)', async function(req, res, next) {
+    let id = req.params.id
+    console.log("[embarcacoesRoutes] Deleting boat with id: "+ id);
+    let result = await embarcacoesModel.getAllEmbarcacoesFromUser(id);
+    res.status(result.status).send(result.data);
+
+});
+
+
+
 module.exports = router;

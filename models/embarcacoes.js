@@ -199,6 +199,26 @@ module.exports.verifyEmbarcacao = async function(id) {
         return { status: 500, data: err };
     }
 }
+module.exports.getAllEmbarcacoesFromUser = async function(id) {
+    console.log("[embarcacaoModel.getAllEmbarcacoesFromUser] id = " + JSON.stringify(id));
+    try {
+        let sql = 'select * from embarcacao WHERE embarcacao_prop_id = $1';
+        let result = await client.query(sql, [id]);
+        let embarcacoes = result.rows;
+        if (embarcacoes.length > 0) {
+            console.log("[embarcacaoModel.getAllEmbarcacoesFromUser] embarcacao = " + JSON.stringify(embarcacoes[0]));
+            return { status: 200, data: embarcacoes[0] };
+        } else {
+            return { status: 404, data: { msg: "Embarcacao not found." } };
+        }
+
+    } catch (err) {
+        console.log(err);
+        return { status: 500, data: err };
+    }
+
+}
+
 
 
 
