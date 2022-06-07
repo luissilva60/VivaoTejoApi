@@ -207,7 +207,7 @@ module.exports.getAllEmbarcacoesFromUser = async function(id) {
         let embarcacoes = result.rows;
         if (embarcacoes.length > 0) {
             console.log("[embarcacaoModel.getAllEmbarcacoesFromUser] embarcacao = " + JSON.stringify(embarcacoes[0]));
-            return { status: 200, data: embarcacoes[0] };
+            return { status: 200, data: embarcacoes };
         } else {
             return { status: 404, data: { msg: "Embarcacao not found." } };
         }
