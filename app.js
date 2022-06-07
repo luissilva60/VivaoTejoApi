@@ -40,5 +40,5 @@ var caisRouter = require('./routes/caisRoutes')
 app.use('/api/cais', caisRouter)
 /*                 FOTOS                       */
 var fotosRouter = require('./routes/fotosRoutes')
-app.use('/api/cais', fotosRouter)
+app.use('/api/fotos', fotosRouter)
 module.exports = app;
