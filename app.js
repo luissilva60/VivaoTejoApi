@@ -38,5 +38,7 @@ app.use('/api/artigos', artigosRouter)
 /*                 CAIS                        */
 var caisRouter = require('./routes/caisRoutes')
 app.use('/api/cais', caisRouter)
-
+/*                 FOTOS                       */
+var fotosRouter = require('./routes/fotosRoutes')
+app.use('/api/cais', fotosRouter)
 module.exports = app;
